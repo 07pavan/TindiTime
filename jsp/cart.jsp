@@ -30,14 +30,14 @@
     }
     
     if (promoApplied && subtotal.compareTo(BigDecimal.ZERO) > 0) {
-        discount = new BigDecimal("2.00");
+        discount = new BigDecimal("160.00");
         if (subtotal.compareTo(discount) < 0) {
             discount = subtotal;
         }
     }
     
-    BigDecimal deliveryFee = subtotal.compareTo(BigDecimal.ZERO) > 0 ? new BigDecimal("1.50") : BigDecimal.ZERO;
-    BigDecimal taxFee = subtotal.compareTo(BigDecimal.ZERO) > 0 ? new BigDecimal("0.50") : BigDecimal.ZERO;
+    BigDecimal deliveryFee = subtotal.compareTo(BigDecimal.ZERO) > 0 ? new BigDecimal("120.00") : BigDecimal.ZERO;
+    BigDecimal taxFee = subtotal.compareTo(BigDecimal.ZERO) > 0 ? new BigDecimal("40.00") : BigDecimal.ZERO;
     BigDecimal gtotal = subtotal.subtract(discount).add(deliveryFee).add(taxFee);
     
     // Feed parameters back into request scopes
@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="col-9 col-sm-4">
                                     <h6 class="fw-bold mb-1 text-dark text-truncate">${item.menuItem.name}</h6>
-                                    <span class="fs-8 text-muted fw-bold">$${item.menuItem.price} each</span>
+                                    <span class="fs-8 text-muted fw-bold">₹${item.menuItem.price} each</span>
                                 </div>
                                 <div class="col-6 col-sm-3 d-flex justify-content-center">
                                     <!-- Qty custom modifier form -->
@@ -128,7 +128,7 @@
                                     </form>
                                 </div>
                                 <div class="col-4 col-sm-2 text-sm-end text-start">
-                                    <span class="fw-bold text-dark font-mono">$${item.subtotal}</span>
+                                    <span class="fw-bold text-dark font-mono">₹${item.subtotal}</span>
                                 </div>
                                 <div class="col-2 col-sm-1 text-end">
                                     <form action="cart" method="POST" class="d-inline">
@@ -177,7 +177,7 @@
                     
                     <c:if test="${promoApplied}">
                         <div class="alert alert-success py-2 px-3 fs-8 mt-3 mb-0 rounded-3 d-flex align-items-center justify-content-between text-success" id="promo-success-box">
-                            <span><i class="bi bi-check-circle-fill me-1"></i> Coupon applied! Flat $2.00 off.</span>
+                            <span><i class="bi bi-check-circle-fill me-1"></i> Coupon applied! Flat ₹160.00 off.</span>
                             <button class="btn btn-sm text-danger p-0 border-0 bg-transparent fw-bold fs-8" onclick="removePromo()">Remove</button>
                         </div>
                     </c:if>
@@ -190,25 +190,25 @@
                     <div class="d-flex flex-column gap-3 border-bottom pb-3 mb-3 fs-7" id="cart-billing-breakdown">
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Item Subtotal</span>
-                            <span class="fw-medium text-dark font-mono" id="val-subtotal">$${subtotal}</span>
+                            <span class="fw-medium text-dark font-mono" id="val-subtotal">₹${subtotal}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Promo Discount</span>
-                            <span class="fw-medium text-success font-mono" id="val-discount">-$${discount}</span>
+                            <span class="fw-medium text-success font-mono" id="val-discount">-₹${discount}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Delivery partner fee</span>
-                            <span class="fw-medium text-dark font-mono" id="val-delivery">$${deliveryFee}</span>
+                            <span class="fw-medium text-dark font-mono" id="val-delivery">₹${deliveryFee}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-muted">Convenience & Restaurant taxes</span>
-                            <span class="fw-medium text-dark font-mono" id="val-tax">$${taxFee}</span>
+                            <span class="fw-medium text-dark font-mono" id="val-tax">₹${taxFee}</span>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fw-bold fs-6 text-dark">Grand Total</span>
-                        <span class="fw-extrabold fs-5 text-orange font-mono" id="val-grand-total">$${gtotal}</span>
+                        <span class="fw-extrabold fs-5 text-orange font-mono" id="val-grand-total">₹${gtotal}</span>
                     </div>
 
                     <a href="checkout.jsp" class="btn btn-orange w-full py-3 rounded-4 fw-bold fs-5 text-decoration-none text-center shadow-md hover-up <c:if test='${empty cartItems}'>disabled</c:if>" id="btn-proceed-checkout">

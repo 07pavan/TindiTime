@@ -39,6 +39,10 @@
 
                     <% 
                         String errorMsg = (String) request.getAttribute("error");
+                        String msgParam = request.getParameter("msg");
+                        if ("auth_required".equals(msgParam)) {
+                            errorMsg = "Please Sign In or Register to manage your cart and place orders!";
+                        }
                         if (errorMsg != null) {
                     %>
                         <div class="alert alert-danger px-3 py-2 small rounded-3 d-flex align-items-center gap-2 mb-3" role="alert" id="login-error-alert">

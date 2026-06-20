@@ -195,7 +195,7 @@
                             </div>
                             <div class="col-sm-4 text-sm-end text-start">
                                 <span class="text-muted small d-block">Grand Total:</span>
-                                <span class="fw-bold fs-4 text-orange font-mono">$${parseFloat(order.total).toFixed(2)}</span>
+                                <span class="fw-bold fs-4 text-orange font-mono">₹${parseFloat(order.total).toFixed(2)}</span>
                             </div>
                         </div>
 

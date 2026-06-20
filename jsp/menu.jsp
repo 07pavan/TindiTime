@@ -38,7 +38,7 @@
     int deliveryTimeMins = restaurant != null ? restaurant.getDeliveryTimeMins() : 20;
     String deliveryTime = deliveryTimeMins + " mins";
     BigDecimal costVal = restaurant != null && restaurant.getCostForTwo() != null ? restaurant.getCostForTwo() : new BigDecimal("8.00");
-    String costForTwo = "$" + costVal + " for two";
+    String costForTwo = "₹" + costVal + " for two";
     
     String address = "Shop 12, Ground Floor, Carter Road, Bandra West, Mumbai";
     if (restaurant != null) {
@@ -118,7 +118,7 @@
                                 <i class="bi bi-percent text-danger fs-4 ms-1"></i>
                                 <div class="text-start">
                                     <h6 class="mb-0 fs-8 fw-bold">USE CODE "QKBITE20"</h5>
-                                    <p class="mb-0 fs-9 text-muted" style="font-size: 11px;">get 20% discount up to $5</p>
+                                    <p class="mb-0 fs-9 text-muted" style="font-size: 11px;">get 20% discount up to ₹400</p>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                                         <span class="nonveg-badge" title="Non-Veg"></span>
                                     </c:if>
                                     <h5 class="fw-bold text-dark mb-1">${item.name}</h5>
-                                    <div class="fw-bold text-orange mb-2 font-mono">$${item.price}</div>
+                                    <div class="fw-bold text-orange mb-2 font-mono">₹${item.price}</div>
                                     <p class="text-muted small mb-0 d-none d-sm-block">
                                         ${item.description}
                                     </p>
@@ -173,7 +173,7 @@
                                     <div class="menu-item-img-container mb-2">
                                         <img src="${item.imageUrl}" alt="${item.name}">
                                     </div>
-                                    <form action="cart.jsp" method="POST">
+                                    <form action="${pageContext.request.contextPath}/cart" method="POST">
                                         <input type="hidden" name="action" value="add">
                                         <input type="hidden" name="id" value="${item.id}">
                                         <input type="hidden" name="name" value="${item.name}">

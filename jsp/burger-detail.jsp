@@ -44,7 +44,7 @@
                             <span class="text-muted small fw-bold tracking-wider uppercase">BURGERS & SLIDERS</span>
                         </div>
                         <h1 class="display-5 text-dark fw-bold font-display mb-2">Gourmet Cheddar Bacon Burger</h1>
-                        <h2 class="text-orange fw-bold font-mono mb-4 fs-2" id="burger-display-price">$5.50</h2>
+                        <h2 class="text-orange fw-bold font-mono mb-4 fs-2" id="burger-display-price">₹440.00</h2>
                         
                         <h6 class="fw-bold text-dark mb-2">Description</h6>
                         <p class="text-muted small leading-relaxed mb-4">
@@ -67,28 +67,28 @@
                             
                             <div class="form-check d-flex justify-content-between align-items-center mb-2 fs-7">
                                 <div>
-                                    <input class="form-check-input accent-orange addon-checkbox" type="checkbox" id="addon-extra-cheese" value="0.75" onchange="calculateTotal()">
+                                    <input class="form-check-input accent-orange addon-checkbox" type="checkbox" id="addon-extra-cheese" value="60.00" onchange="calculateTotal()">
                                     <label class="form-check-label text-dark fw-medium" for="addon-extra-cheese">Extra Cheddar Cheese</label>
                                 </div>
-                                <span class="text-muted font-mono">+$0.75</span>
+                                <span class="text-muted font-mono">+₹60.00</span>
                             </div>
 
                             <div class="form-check d-flex justify-content-between align-items-center mb-2 fs-7">
                                 <div>
-                                    <input class="form-check-input accent-orange addon-checkbox" type="checkbox" id="addon-extra-bacon" value="1.50" onchange="calculateTotal()">
+                                    <input class="form-check-input accent-orange addon-checkbox" type="checkbox" id="addon-extra-bacon" value="120.00" onchange="calculateTotal()">
                                     <label class="form-check-label text-dark fw-medium" for="addon-extra-bacon">Double Applewood Smoked Bacon</label>
                                 </div>
-                                <span class="text-muted font-mono">+$1.50</span>
+                                <span class="text-muted font-mono">+₹120.00</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Quantity Counter and Interactive CTA -->
-                    <form action="cart.jsp" method="POST" id="burger-add-form" class="mt-4 pt-4 border-top">
+                    <form action="${pageContext.request.contextPath}/cart" method="POST" id="burger-add-form" class="mt-4 pt-4 border-top">
                         <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="id" value="b1">
+                        <input type="hidden" name="id" value="1">
                         <input type="hidden" name="name" id="final-item-name" value="Gourmet Cheddar Bacon Burger">
-                        <input type="hidden" name="price" id="final-item-price" value="5.50">
+                        <input type="hidden" name="price" id="final-item-price" value="440.00">
                         <input type="hidden" name="img" value="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=150&q=80">
                         
                         <div class="d-flex flex-column flex-sm-row gap-3 align-items-sm-center">
@@ -101,7 +101,7 @@
 
                             <!-- Cart Add Button -->
                             <button type="submit" class="btn btn-orange flex-grow-1 py-3 rounded-4 fw-bold fs-5 shadow-md">
-                                Add to Basket (<span id="cart-cost-display" class="font-mono">$5.50</span>)
+                                Add to Basket (<span id="cart-cost-display" class="font-mono">₹440.00</span>)
                             </button>
                         </div>
                     </form>
@@ -118,7 +118,7 @@
 
     <!-- Interactive calculation script -->
     <script>
-        const basePrice = 5.50;
+        const basePrice = 440.00;
         let selectedQty = 1;
 
         function updateQty(val) {
@@ -156,7 +156,7 @@
             document.getElementById('final-item-name').value = finalName;
             
             // Update UI
-            document.getElementById('cart-cost-display').innerText = '$' + total.toFixed(2);
+            document.getElementById('cart-cost-display').innerText = '₹' + total.toFixed(2);
         }
     </script>
 </body>

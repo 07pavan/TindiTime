@@ -68,6 +68,11 @@ public class CartServlet extends HttpServlet {
         if (action != null) {
             try {
                 if (action.equalsIgnoreCase("add")) {
+                    // Enforce login for cart additions
+                    if (session.getAttribute("username") == null) {
+                        response.sendRedirect("login?msg=auth_required");
+                        return;
+                    }
                     if (idParam != null && !idParam.trim().isEmpty()) {
                         int itemId = Integer.parseInt(idParam);
                         MenuItem item = menuItemDAO.getMenuItemById(itemId);

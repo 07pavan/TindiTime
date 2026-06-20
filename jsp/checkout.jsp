@@ -1,4 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    if (session.getAttribute("username") == null) {
+        response.sendRedirect("login.jsp?msg=auth_required");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en" id="root-html-checkout">
 <head>
@@ -138,20 +144,20 @@
                     <div class="d-flex flex-column gap-2 fs-7 mb-4">
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Item Subtotal:</span>
-                            <span class="fw-semibold font-mono" id="sum-subtotal">$0.00</span>
+                            <span class="fw-semibold font-mono" id="sum-subtotal">₹0.00</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Promo Code applied:</span>
-                            <span class="fw-semibold text-success font-mono" id="sum-discount">-$0.00</span>
+                            <span class="fw-semibold text-success font-mono" id="sum-discount">-₹0.00</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted font-medium">Delivery & Taxes:</span>
-                            <span class="font-mono text-dark fw-bold">$2.00</span>
+                            <span class="font-mono text-dark fw-bold">₹160.00</span>
                         </div>
                         <hr class="my-1 border-dotted">
                         <div class="d-flex justify-content-between align-items-center mt-1">
                             <span class="fw-bold text-dark fs-6">Payable Total:</span>
-                            <span class="fw-bold text-orange font-mono fs-5" id="sum-grand-total">$0.00</span>
+                            <span class="fw-bold text-orange font-mono fs-5" id="sum-grand-total">₹0.00</span>
                         </div>
                     </div>
 
@@ -209,15 +215,15 @@
                         <div class="text-truncate me-2" style="max-width: 180px;">
                             <span class="fw-bold text-dark">${item.qty}x</span> <span>${item.name}</span>
                         </div>
-                        <span class="font-mono fw-semibold text-dark">$${(parseFloat(item.price) * item.qty).toFixed(2)}</span>
+                        <span class="font-mono fw-semibold text-dark">₹${(parseFloat(item.price) * item.qty).toFixed(2)}</span>
                     </div>
                 `;
             });
 
-            subtotalValEl.innerText = `$${subtotal.toFixed(2)}`;
+            subtotalValEl.innerText = `₹${subtotal.toFixed(2)}`;
             const discountVal = 0.00; // default empty
-            const total = subtotal - discountVal + 2.00;
-            grandTotalValEl.innerText = `$${total.toFixed(2)}`;
+            const total = subtotal - discountVal + 160.00;
+            grandTotalValEl.innerText = `₹${total.toFixed(2)}`;
         }
 
         // Address selection togglers

@@ -54,7 +54,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted font-medium">Paid via:</span>
-                            <span class="fw-bold text-dark" id="txt-paid-via">UPI / Card ($<%= totalVal %>)</span>
+                            <span class="fw-bold text-dark" id="txt-paid-via">UPI / Card (₹<%= totalVal %>)</span>
                         </div>
                     </div>
 

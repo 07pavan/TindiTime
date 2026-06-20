@@ -153,7 +153,7 @@
                         <i class="bi bi-tag-fill position-absolute end-0 bottom-0 text-white-10 fs-1" style="transform: translate(10px, 10px) rotate(-15deg); opacity: 0.15;"></i>
                         <span class="badge bg-white text-orange fw-bold mb-2 align-self-start">FIRST_BITE</span>
                         <h4 class="mb-1">Flat 50% Off</h4>
-                        <p class="small mb-0">Up to $10 off on your very first order.</p>
+                        <p class="small mb-0">Up to ₹800 off on your very first order.</p>
                     </div>
                 </div>
                 <!-- Offer 2 -->
@@ -162,7 +162,7 @@
                         <i class="bi bi-truck position-absolute end-0 bottom-0 text-white-10 fs-1" style="transform: translate(10px, 10px) rotate(-15deg); opacity: 0.15;"></i>
                         <span class="badge bg-orange text-white fw-bold mb-2 align-self-start">FREE_DELIVERY</span>
                         <h4 class="mb-1">Free Delivery</h4>
-                        <p class="small mb-0">On super orders above $15 from partner outlets.</p>
+                        <p class="small mb-0">On super orders above ₹1200 from partner outlets.</p>
                     </div>
                 </div>
                 <!-- Offer 3 -->
@@ -204,7 +204,7 @@
                             <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
                                 <div class="badge bg-success d-flex align-items-center gap-1"><i class="bi bi-star-fill text-white fs-8"></i> 4.5</div>
                                 <span class="fs-8 text-muted fw-bold">• 20-25 MIN</span>
-                                <span class="fs-8 text-dark fw-bold">$8 For Two</span>
+                                <span class="fs-8 text-dark fw-bold">₹640 For Two</span>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                             <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
                                 <div class="badge bg-success d-flex align-items-center gap-1"><i class="bi bi-star-fill text-white fs-8"></i> 4.7</div>
                                 <span class="fs-8 text-muted fw-bold">• 25-30 MIN</span>
-                                <span class="fs-8 text-dark fw-bold">$12 For Two</span>
+                                <span class="fs-8 text-dark fw-bold">₹960 For Two</span>
                             </div>
                         </div>
                     </div>
@@ -242,7 +242,7 @@
                             <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
                                 <div class="badge bg-success d-flex align-items-center gap-1"><i class="bi bi-star-fill text-white fs-8"></i> 4.8</div>
                                 <span class="fs-8 text-muted fw-bold">• 35-40 MIN</span>
-                                <span class="fs-8 text-dark fw-bold">$15 For Two</span>
+                                <span class="fs-8 text-dark fw-bold">₹1200 For Two</span>
                             </div>
                         </div>
                     </div>
@@ -262,7 +262,7 @@
                             <div class="d-flex align-items-center justify-content-between mt-3 pt-2 border-top">
                                 <div class="badge bg-success d-flex align-items-center gap-1"><i class="bi bi-star-fill text-white fs-8"></i> 4.4</div>
                                 <span class="fs-8 text-muted fw-bold">• 15-20 MIN</span>
-                                <span class="fs-8 text-dark fw-bold">$10 For Two</span>
+                                <span class="fs-8 text-dark fw-bold">₹800 For Two</span>
                             </div>
                         </div>
                     </div>
