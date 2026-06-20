@@ -1,10 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     // Fetch profile variables from session or fall back to mock defaults
-    String username = (String) session.getAttribute("username");
-    if (username == null) {
-        username = "Pavan Hegade";
-    }
     String email = (String) session.getAttribute("email");
     if (email == null) {
         email = "pavanhegade1232@gmail.com";
@@ -35,6 +31,11 @@
 
     <!-- Header Navigation Include -->
     <%@ include file="navbar.jsp" %>
+    <%
+        if (username == null) {
+            username = "Pavan Hegade";
+        }
+    %>
 
     <main class="container py-5" id="profile-main-section">
         <div class="row" id="profile-dashboard-layout">
