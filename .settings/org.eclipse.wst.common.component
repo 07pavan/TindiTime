@@ -3,6 +3,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/jsp" source-path="/jsp"/>
         <wb-resource deploy-path="/assets" source-path="/assets"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="/lib"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <property name="context-root" value="HungryGO"/>
         <property name="java-output-path" value="/HungryGO/bin"/>
