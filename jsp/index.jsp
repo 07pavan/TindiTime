@@ -130,7 +130,7 @@
                 </a>
                 <!-- Category 6 -->
                 <a href="restaurants.jsp?category=North Indian" class="category-item text-decoration-none text-dark flex-shrink-0" id="cat-north-indian">
-                    <img src="https://images.unsplash.com/photo-1585938338392-50a59970d8ee?auto=format&fit=crop&w=150&q=80" alt="North Indian" class="category-img">
+                    <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=150&q=80" alt="North Indian" class="category-img">
                     <div class="mt-2 fw-medium">Thali</div>
                 </a>
                 <!-- Category 7 -->
