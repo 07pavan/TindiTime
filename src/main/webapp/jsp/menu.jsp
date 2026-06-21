@@ -90,7 +90,7 @@
                                 <i class="bi bi-percent text-danger fs-4 ms-1"></i>
                                 <div class="text-start">
                                     <h6 class="mb-0 fs-8 fw-bold">USE CODE "QKBITE20"</h6>
-                                    <p class="mb-0 text-muted" style="font-size:11px;">get 20% discount up to ₹400</p>
+                                    <p class="mb-0 text-muted" style="font-size:11px;">get flat ₹100 discount on your order</p>
                                 </div>
                             </div>
                         </div>
@@ -183,17 +183,116 @@
     <jsp:include page="footer.jsp" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        /* ── Veg-only filter ─────────────────────────────────── */
         function toggleVegOnly() {
-            const isChecked = document.getElementById('veg-only-switch').checked;
-            document.querySelectorAll('.food-item-row-card').forEach(card => {
-                const isVeg = card.getAttribute('data-veg') === 'true';
-                if (isChecked && !isVeg) {
-                    card.classList.add('d-none');
-                } else {
-                    card.classList.remove('d-none');
-                }
+            var isChecked = document.getElementById('veg-only-switch').checked;
+            document.querySelectorAll('.food-item-row-card').forEach(function(card) {
+                var isVeg = card.getAttribute('data-veg') === 'true';
+                card.classList.toggle('d-none', isChecked && !isVeg);
             });
         }
+
+        /* ── AJAX Add-to-Cart handler ────────────────────────── */
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /* Find every "Add to cart" form on this page */
+            document.querySelectorAll('form').forEach(function (form) {
+                var actionInput = form.querySelector('input[name="action"]');
+                var formAction  = form.getAttribute('action') || '';
+                if (!actionInput || actionInput.value !== 'add') return;
+                if (formAction.indexOf('/cart') === -1) return;
+
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    var btn      = form.querySelector('button[type="submit"]');
+                    var origHtml = btn ? btn.innerHTML : '';
+                    var isOutline = btn ? btn.classList.contains('btn-outline-orange') : false;
+
+                    /* 1. Loading state */
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Adding…';
+                    }
+
+                    /* 2. POST via fetch — AJAX */
+                    fetch(form.getAttribute('action'), {
+                        method : 'POST',
+                        body   : new URLSearchParams(new FormData(form)),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept'          : 'application/json',
+                            'Content-Type'    : 'application/x-www-form-urlencoded'
+                        }
+                    })
+                    .then(function (resp) {
+                        /* 401 = not logged in → redirect to login */
+                        if (resp.status === 401) {
+                            return resp.json().then(function (d) {
+                                window.location.href = d.redirect || '${pageContext.request.contextPath}/login?msg=auth_required';
+                                throw new Error('auth');
+                            });
+                        }
+                        return resp.json();
+                    })
+                    .then(function (data) {
+                        if (!data) return;
+
+                        if (data.success) {
+                            /* 3a. Green "✓ Added!" on the button */
+                            if (btn) {
+                                btn.classList.remove('btn-outline-orange', 'btn-orange');
+                                btn.classList.add('btn-success');
+                                btn.innerHTML = '<i class="bi bi-check-lg"></i> Added!';
+                                setTimeout(function () {
+                                    btn.disabled = false;
+                                    btn.innerHTML = origHtml;
+                                    btn.classList.remove('btn-success');
+                                    btn.classList.add(isOutline ? 'btn-outline-orange' : 'btn-orange');
+                                }, 1800);
+                            }
+
+                            /* 3b. Update floating bar + navbar badge */
+                            var cartSize = data.cartSize;
+
+                            /* Navbar badge */
+                            var badge = document.getElementById('nav-cart-badge');
+                            if (badge) {
+                                badge.textContent = cartSize;
+                                badge.classList.remove('pulse-animation');
+                                void badge.offsetWidth; /* restart CSS animation */
+                                badge.classList.add('pulse-animation');
+                            }
+
+                            /* Floating bottom bar */
+                            var bar = document.getElementById('floating-cart-bar');
+                            if (bar) {
+                                var txt = document.getElementById('floating-cart-text');
+                                if (txt) {
+                                    txt.innerHTML =
+                                        '<span id="floating-cart-qty" class="font-mono">' + cartSize + '</span>&nbsp;' +
+                                        (cartSize === 1 ? 'Item' : 'Items') + ' Selected';
+                                }
+                                bar.classList.remove('d-none');
+                                setTimeout(function () { bar.classList.add('show'); }, 10);
+                            }
+
+                        } else if (data.redirect) {
+                            window.location.href = data.redirect;
+                        }
+                    })
+                    .catch(function (err) {
+                        if (err.message !== 'auth') {
+                            /* Restore button on network errors */
+                            if (btn) {
+                                btn.disabled = false;
+                                btn.innerHTML = origHtml;
+                            }
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 </html>
