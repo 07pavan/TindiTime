@@ -55,6 +55,23 @@ public class AuthenticationFilter implements Filter {
         } else {
             // User is anonymous and trying to access a protected page, redirect to Login
             System.out.println("HungryGO Security: Anonymous access denied for " + path + ". Redirecting to /login...");
+            
+            // Check if the request is an AJAX call
+            boolean isAjax = false;
+            String requestedWith = request.getHeader("X-Requested-With");
+            String acceptHeader = request.getHeader("Accept");
+            if ("XMLHttpRequest".equals(requestedWith) || (acceptHeader != null && acceptHeader.contains("application/json"))) {
+                isAjax = true;
+            }
+            
+            if (isAjax) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"success\":false,\"redirect\":\"" + contextPath + "/login?msg=auth_required\"}");
+                return;
+            }
+            
             response.sendRedirect(contextPath + "/login?msg=auth_required");
         }
     }
