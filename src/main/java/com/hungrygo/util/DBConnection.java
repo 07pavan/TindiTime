@@ -60,6 +60,8 @@ public class DBConnection {
      * @throws SQLException if a database access error occurs or URL is invalid
      */
     public static Connection getConnection() throws SQLException {
+
+
         try {
             Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
             if (connection != null && !connection.isClosed()) {
