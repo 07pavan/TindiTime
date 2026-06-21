@@ -96,6 +96,14 @@ public class CartServlet extends HttpServlet {
         
         System.out.println("HTTP POST: Executing cart API operation action - " + action + ", item id: " + idParam);
         
+        // Detect AJAX requests
+        boolean isAjax = false;
+        String requestedWith = request.getHeader("X-Requested-With");
+        String acceptHeader = request.getHeader("Accept");
+        if ("XMLHttpRequest".equals(requestedWith) || (acceptHeader != null && acceptHeader.contains("application/json"))) {
+            isAjax = true;
+        }
+        
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) {
@@ -108,6 +116,13 @@ public class CartServlet extends HttpServlet {
                 if (action.equalsIgnoreCase("add")) {
                     // Enforce login for cart additions
                     if (session.getAttribute("username") == null) {
+                        if (isAjax) {
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"success\":false,\"redirect\":\"" + request.getContextPath() + "/login?msg=auth_required\"}");
+                            return;
+                        }
                         response.sendRedirect("login?msg=auth_required");
                         return;
                     }
@@ -157,6 +172,14 @@ public class CartServlet extends HttpServlet {
         Cookie countCookie = new Cookie("cartCount", String.valueOf(cartCount));
         countCookie.setPath("/");
         response.addCookie(countCookie);
+
+        // Return JSON for AJAX requests
+        if (isAjax) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"success\":true,\"cartSize\":" + cartCount + "}");
+            return;
+        }
 
         // Redirect to the return URL or default back to cart
         String returnUrl = request.getParameter("returnUrl");
