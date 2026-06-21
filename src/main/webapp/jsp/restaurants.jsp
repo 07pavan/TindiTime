@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html lang="en" id="root-html-restaurants">
 <head>
@@ -81,7 +82,7 @@
                     <div class="col-lg-3 col-md-6 restaurant-item-card"
                          data-rating="${restaurant.rating}"
                          data-time="${restaurant.deliveryTimeMins}"
-                         data-veg="${restaurant.cuisineType == 'Pure Veg' or restaurant.cuisineType == 'South Indian' or restaurant.cuisineType == 'Healthy Salads'}"
+                         data-veg="${fn:contains(restaurant.cuisineType, 'Veg') or fn:contains(restaurant.cuisineType, 'South Indian') or fn:contains(restaurant.cuisineType, 'Salad') or fn:contains(restaurant.cuisineType, 'Sweets') or fn:contains(restaurant.cuisineType, 'Dessert')}"
                          data-offer="true"
                          data-category="${restaurant.cuisineType}"
                          data-title="${restaurant.name}">
@@ -164,11 +165,32 @@
         }
 
         function filterByCategory(category) {
+            const catLower = category.toLowerCase();
             const cards = document.querySelectorAll('.restaurant-item-card');
             let matched = 0;
             cards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-                if (cardCategory && cardCategory.toLowerCase() === category.toLowerCase()) {
+                const cardCategory = (card.getAttribute('data-category') || '').toLowerCase();
+                const cardTitle = (card.getAttribute('data-title') || '').toLowerCase();
+                
+                // Substring match on cuisine type or restaurant name
+                let isMatch = cardCategory.includes(catLower) || cardTitle.includes(catLower);
+                
+                // Map synonyms for general categories
+                if (catLower === 'thali') {
+                    isMatch = isMatch || cardCategory.includes('thali') || cardCategory.includes('indian');
+                } else if (catLower === 'north indian') {
+                    isMatch = isMatch || cardCategory.includes('north indian') || cardCategory.includes('punjabi') || cardCategory.includes('thali');
+                } else if (catLower === 'burger') {
+                    isMatch = isMatch || cardCategory.includes('burger');
+                } else if (catLower === 'pizza') {
+                    isMatch = isMatch || cardCategory.includes('pizza');
+                } else if (catLower === 'biryani') {
+                    isMatch = isMatch || cardCategory.includes('biryani');
+                } else if (catLower === 'desserts' || catLower === 'dessert') {
+                    isMatch = isMatch || cardCategory.includes('dessert') || cardCategory.includes('sweet') || cardCategory.includes('shake') || cardCategory.includes('bakehouse');
+                }
+                
+                if (isMatch) {
                     card.classList.remove('d-none');
                     matched++;
                 } else {
