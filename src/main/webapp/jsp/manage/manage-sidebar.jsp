@@ -404,7 +404,7 @@
                 <div class="name">${not empty sessionScope.userName ? sessionScope.userName : 'Admin User'}</div>
                 <div class="email">${not empty sessionScope.userEmail ? sessionScope.userEmail : 'admin@hungrygo.com'}</div>
             </div>
-            <a href="${pageContext.request.contextPath}/logout" class="logout-btn" title="Logout" id="sidenav-logout">
+            <a href="${pageContext.request.contextPath}/login?action=logout" class="logout-btn" title="Logout" id="sidenav-logout">
                 <i class="bi bi-box-arrow-right fs-5"></i>
             </a>
         </div>
