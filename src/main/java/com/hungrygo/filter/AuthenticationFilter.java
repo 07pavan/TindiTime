@@ -44,7 +44,12 @@ public class AuthenticationFilter implements Filter {
                                    path.endsWith("/style.css") ||
                                    path.startsWith("/css/") ||
                                    path.startsWith("/js/") ||
-                                   path.startsWith("/images/");
+                                   path.startsWith("/images/") ||
+                                   path.endsWith(".png") ||
+                                   path.endsWith(".jpg") ||
+                                   path.endsWith(".jpeg") ||
+                                   path.endsWith(".svg") ||
+                                   path.endsWith(".gif");
         
         HttpSession session = request.getSession(false);
         boolean isLoggedIn = (session != null && session.getAttribute("user_id") != null);

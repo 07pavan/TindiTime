@@ -68,6 +68,14 @@ public class ManagementAccessFilter implements Filter {
         if (request.getAttribute("userName") == null) {
             request.setAttribute("userName", session.getAttribute("username"));
         }
+        if ("SUPER_ADMIN".equals(role)) {
+            try {
+                com.hungrygo.model.dao.AdminDAO adminDAO = new com.hungrygo.model.dao.impl.AdminDAOImpl();
+                request.setAttribute("pendingApprovals", adminDAO.getPendingApprovalCount());
+            } catch (Exception e) {
+                System.err.println("ManagementAccessFilter: error loading pendingApprovals — " + e.getMessage());
+            }
+        }
 
         // managePath — strips /manage/ prefix, e.g. "/manage/orders" → "orders"
         String uri         = request.getRequestURI();
