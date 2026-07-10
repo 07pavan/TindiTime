@@ -153,6 +153,10 @@ public class CheckoutServlet extends HttpServlet {
         order.setPaymentStatus(payment.equalsIgnoreCase("COD") ? "Pending" : "Paid");
         order.setOrderStatus("Preparing");
         order.setTotalAmount(grandTotal);
+        if (cart != null && !cart.getItems().isEmpty()) {
+            int firstRestId = cart.getItems().values().iterator().next().getMenuItem().getRestaurantId();
+            order.setRestaurantId(firstRestId);
+        }
 
         for (CartItem cartItem : cart.getItems().values()) {
             OrderItem orderItem = new OrderItem();

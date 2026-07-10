@@ -137,10 +137,13 @@ public class LoginServlet extends HttpServlet {
             addStateCookie(response, "phone",    authenticatedUser.getPhone());
             addStateCookie(response, "address",  authenticatedUser.getAddress());
 
-            System.out.println("HungryGO: login success for " + email + " — redirecting to /index");
-
-            // Drop the user onto the home page
-            response.sendRedirect(request.getContextPath() + "/index");
+            if ("SUPER_ADMIN".equals(userRole) || "RESTAURANT_OWNER".equals(userRole)) {
+                System.out.println("HungryGO: login success for " + email + " (admin/owner) — redirecting to /manage/dashboard");
+                response.sendRedirect(request.getContextPath() + "/manage/dashboard");
+            } else {
+                System.out.println("HungryGO: login success for " + email + " — redirecting to /index");
+                response.sendRedirect(request.getContextPath() + "/index");
+            }
 
         } else {
             System.out.println("HungryGO: login failed for " + email);

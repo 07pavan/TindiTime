@@ -6,6 +6,8 @@ import com.hungrygo.model.dao.OrderDAO;
 import com.hungrygo.model.dao.RestaurantDAO;
 import com.hungrygo.model.dao.impl.OrderDAOImpl;
 import com.hungrygo.model.dao.impl.RestaurantDAOImpl;
+import com.hungrygo.model.dao.AdminDAO;
+import com.hungrygo.model.dao.impl.AdminDAOImpl;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -42,6 +44,7 @@ public class AdminOrderServlet extends HttpServlet {
 
     private final OrderDAO      orderDAO      = new OrderDAOImpl();
     private final RestaurantDAO restaurantDAO = new RestaurantDAOImpl();
+    private final AdminDAO      adminDAO      = new AdminDAOImpl();
 
     // ── GET /manage/orders ────────────────────────────────────────────────────
     @Override
@@ -76,11 +79,11 @@ public class AdminOrderServlet extends HttpServlet {
         stats.put("confirmedCount",        rawCounts.getOrDefault("Confirmed",        0L));
         stats.put("preparingCount",        rawCounts.getOrDefault("Preparing",        0L));
         stats.put("outForDeliveryCount",   rawCounts.getOrDefault("Out for Delivery", 0L));
-        stats.put("deliveredCount",        rawCounts.getOrDefault("Delivered",        0L));
-        stats.put("cancelledCount",        rawCounts.getOrDefault("Cancelled",        0L));
+        stats.put("deliveredCount",        rawCounts.getOrDefault("Delivered Successfully", 0L) + rawCounts.getOrDefault("Delivered", 0L));
+        stats.put("cancelledCount",        rawCounts.getOrDefault("CANCELLED", 0L) + rawCounts.getOrDefault("Cancelled", 0L));
         // today revenue for the sub-header strip
-        java.math.BigDecimal todayRev = new java.math.BigDecimal(0);
-        stats.put("todayRevenue", todayRev);
+        java.math.BigDecimal todayRev = adminDAO.getTodayRevenue("RESTAURANT_OWNER".equals(role) ? ownerRestId : filterRestId);
+        stats.put("todayRevenue", todayRev != null ? todayRev : java.math.BigDecimal.ZERO);
 
         // ── Paginated order list ──────────────────────────────────────────────
         List<Order> orders = orderDAO.getOrdersAdmin(

@@ -40,6 +40,7 @@ public class ProfileServlet extends HttpServlet {
         if (user != null) {
             // Update session variables with latest DB values
             session.setAttribute("username", user.getName());
+            session.setAttribute("userName", user.getName());
             session.setAttribute("email", user.getEmail());
             session.setAttribute("phone", user.getPhone());
             session.setAttribute("address", user.getAddress());
@@ -82,6 +83,7 @@ public class ProfileServlet extends HttpServlet {
                 if (success) {
                     // Update session details
                     session.setAttribute("username", user.getName());
+                    session.setAttribute("userName", user.getName());
                     session.setAttribute("phone", user.getPhone());
                     session.setAttribute("address", user.getAddress());
                     

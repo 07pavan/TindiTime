@@ -85,10 +85,23 @@ public class AdminDashboardServlet extends HttpServlet {
             stats.put("totalCustomers",    adminDAO.getTotalCustomerCount());
         } else {
             // Owner sees their restaurant's open/closed status instead
-            // (will be enriched in a later step when RestaurantDAO is extended)
             stats.put("activeRestaurants", 0L);
             stats.put("pendingApprovals",  0L);
             stats.put("totalCustomers",    0L);
+
+            // Populate RESTAURANT_OWNER KPIs
+            stats.put("myRevenue", totalRev);
+            if (restaurantId != null) {
+                try {
+                    com.hungrygo.model.Restaurant rest = new com.hungrygo.model.dao.impl.RestaurantDAOImpl().getRestaurantById(restaurantId);
+                    stats.put("avgRating", rest != null ? rest.getRating() : java.math.BigDecimal.ZERO);
+                } catch (Exception e) {
+                    System.err.println("AdminDashboardServlet: error loading average rating — " + e.getMessage());
+                    stats.put("avgRating", java.math.BigDecimal.ZERO);
+                }
+            } else {
+                stats.put("avgRating", java.math.BigDecimal.ZERO);
+            }
         }
 
         // ── Fetch recent orders feed (last 10) ───────────────────────────────

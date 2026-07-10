@@ -11,14 +11,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * AdminRestaurantServlet — manages the restaurant listing, approval queue,
- * and status toggling in the admin panel.
+ * AdminRestaurantServlet — full CRUD + status management for restaurants.
  *
  * URL mappings (web.xml):
  *   GET  /manage/restaurants            → list with search/filter/pagination
+ *   POST /manage/restaurants/add        → insert new restaurant
+ *   POST /manage/restaurants/edit       → update restaurant details
+ *   POST /manage/restaurants/delete     → hard-delete restaurant
  *   POST /manage/restaurants/approve    → status = ACTIVE
  *   POST /manage/restaurants/reject     → status = REJECTED
  *   POST /manage/restaurants/suspend    → status = SUSPENDED
@@ -58,13 +61,18 @@ public class AdminRestaurantServlet extends HttpServlet {
         int totalPages = (int) Math.ceil((double) totalRows / PAGE_SIZE);
         if (totalPages < 1) totalPages = 1;
 
+        // ── All restaurants (for edit dropdown reference) ─────────────────────
+        List<Restaurant> allForDropdown = restaurantDAO.getAllRestaurants();
+
         // ── Set requestScope ──────────────────────────────────────────────────
         request.setAttribute("pendingRestaurants", pendingRestaurants);
         request.setAttribute("allRestaurants",     allRestaurants);
+        request.setAttribute("allForDropdown",     allForDropdown);
         request.setAttribute("filterStatus",       filterStatus);
         request.setAttribute("searchQuery",        searchQuery);
         request.setAttribute("currentPage",        page);
         request.setAttribute("totalPages",         totalPages);
+        request.setAttribute("totalRestaurants",   totalRows);
 
         request.getRequestDispatcher("/jsp/manage/manage-restaurants.jsp")
                .forward(request, response);
@@ -77,36 +85,112 @@ public class AdminRestaurantServlet extends HttpServlet {
 
         String pathInfo = request.getRequestURI()
                                  .substring(request.getContextPath().length());
-        // e.g. /manage/restaurants/approve → action = "approve"
         String action = pathInfo.replaceFirst("/manage/restaurants/?", "").trim();
 
-        int restaurantId = parseId(request.getParameter("restaurantId"));
-        if (restaurantId <= 0) {
-            response.sendRedirect(request.getContextPath() + "/manage/restaurants?err=invalid_id");
-            return;
-        }
+        boolean ok;
+        String  redirectParam;
 
-        String newStatus;
         switch (action) {
+
+            // ── CRUD: Add new restaurant ──────────────────────────────────────
+            case "add":
+                ok = handleAdd(request);
+                redirectParam = ok ? "msg=add_success" : "err=add_failed";
+                response.sendRedirect(request.getContextPath() + "/manage/restaurants?" + redirectParam);
+                return;
+
+            // ── CRUD: Edit restaurant details ─────────────────────────────────
+            case "edit":
+                ok = handleEdit(request);
+                redirectParam = ok ? "msg=edit_success" : "err=edit_failed";
+                response.sendRedirect(request.getContextPath() + "/manage/restaurants?" + redirectParam);
+                return;
+
+            // ── CRUD: Delete restaurant ───────────────────────────────────────
+            case "delete":
+                int delId = parseId(request.getParameter("restaurantId"));
+                ok = (delId > 0) && restaurantDAO.deleteRestaurant(delId);
+                redirectParam = ok ? "msg=delete_success" : "err=delete_failed";
+                response.sendRedirect(request.getContextPath() + "/manage/restaurants?" + redirectParam);
+                return;
+
+            // ── Status management ─────────────────────────────────────────────
             case "approve":
             case "activate":
-                newStatus = "ACTIVE";
-                break;
+                handleStatusChange(request, response, "ACTIVE");
+                return;
             case "reject":
-                newStatus = "REJECTED";
-                break;
+                handleStatusChange(request, response, "REJECTED");
+                return;
             case "suspend":
-                newStatus = "SUSPENDED";
-                break;
+                handleStatusChange(request, response, "SUSPENDED");
+                return;
+
             default:
                 response.sendRedirect(request.getContextPath() + "/manage/restaurants?err=unknown_action");
-                return;
         }
+    }
 
-        boolean ok = restaurantDAO.updateStatus(restaurantId, newStatus);
-        String  msg = ok ? "status_updated" : "update_failed";
+    // ── Action handlers ───────────────────────────────────────────────────────
 
-        response.sendRedirect(request.getContextPath() + "/manage/restaurants?msg=" + msg);
+    private boolean handleAdd(HttpServletRequest req) {
+        Restaurant r = buildRestaurantFromRequest(req, -1);
+        return r != null && restaurantDAO.addRestaurant(r);
+    }
+
+    private boolean handleEdit(HttpServletRequest req) {
+        int id = parseId(req.getParameter("restaurantId"));
+        if (id <= 0) return false;
+        Restaurant r = buildRestaurantFromRequest(req, id);
+        return r != null && restaurantDAO.updateRestaurant(r);
+    }
+
+    private void handleStatusChange(HttpServletRequest req,
+                                    HttpServletResponse res, String newStatus)
+            throws IOException {
+        int id = parseId(req.getParameter("restaurantId"));
+        if (id <= 0) {
+            res.sendRedirect(req.getContextPath() + "/manage/restaurants?err=invalid_id");
+            return;
+        }
+        boolean ok = restaurantDAO.updateStatus(id, newStatus);
+        res.sendRedirect(req.getContextPath() + "/manage/restaurants?msg=" + (ok ? "status_updated" : "update_failed"));
+    }
+
+    // ── Build Restaurant from form fields ─────────────────────────────────────
+
+    private Restaurant buildRestaurantFromRequest(HttpServletRequest req, int id) {
+        try {
+            String name = trim(req.getParameter("name"));
+            if (name == null) return null;
+
+            Restaurant r = new Restaurant();
+            if (id > 0) r.setId(id);
+
+            r.setName(name);
+            r.setCuisineType(trim(req.getParameter("cuisineType")));
+            r.setAddress(trim(req.getParameter("address")));
+            r.setCity(trim(req.getParameter("city")));
+            r.setPhone(trim(req.getParameter("phone")));
+            r.setEmail(trim(req.getParameter("email")));
+            r.setDescription(trim(req.getParameter("description")));
+            r.setImageUrl(trim(req.getParameter("imageUrl")));
+
+            String ratingStr = trim(req.getParameter("rating"));
+            r.setRating(ratingStr != null ? new BigDecimal(ratingStr) : BigDecimal.ZERO);
+
+            String deliveryStr = trim(req.getParameter("deliveryTimeMins"));
+            r.setDeliveryTimeMins(deliveryStr != null ? Integer.parseInt(deliveryStr) : 30);
+
+            String costStr = trim(req.getParameter("costForTwo"));
+            r.setCostForTwo(costStr != null ? new BigDecimal(costStr) : BigDecimal.ZERO);
+
+            r.setActive(true);
+            return r;
+        } catch (Exception e) {
+            System.err.println("AdminRestaurantServlet: error building Restaurant — " + e.getMessage());
+            return null;
+        }
     }
 
     // ── Private helpers ───────────────────────────────────────────────────────
