@@ -19,6 +19,12 @@ public class MenuItem implements Serializable {
     private boolean isVegetarian;
     private boolean isAvailable;
 
+    /** Transient — populated via JOIN in admin queries, not persisted. */
+    private String restaurantName;
+    public String getRestaurantName()                  { return restaurantName; }
+    public void   setRestaurantName(String restaurantName) { this.restaurantName = restaurantName; }
+
+
     public MenuItem() {}
 
     public MenuItem(int id, int restaurantId, String name, String description, BigDecimal price, String imageUrl, String category, boolean isVegetarian, boolean isAvailable) {

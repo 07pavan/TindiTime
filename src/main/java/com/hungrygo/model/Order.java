@@ -22,9 +22,31 @@ public class Order implements Serializable {
     private BigDecimal totalAmount;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    
+
     // List of items in this order
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    // ── Admin fields (added by migration + transient JOINs) ──────────────────
+    private int    restaurantId;
+    private String customerName;    // snapshot or JOIN from users.name
+    private String customerPhone;   // snapshot field
+    private String restaurantName;  // transient — from JOIN
+
+    public int    getRestaurantId()                  { return restaurantId; }
+    public void   setRestaurantId(int restaurantId)  { this.restaurantId = restaurantId; }
+
+    public String getCustomerName()                  { return customerName; }
+    public void   setCustomerName(String name)       { this.customerName = name; }
+
+    public String getCustomerPhone()                 { return customerPhone; }
+    public void   setCustomerPhone(String phone)     { this.customerPhone = phone; }
+
+    public String getRestaurantName()                { return restaurantName; }
+    public void   setRestaurantName(String name)     { this.restaurantName = name; }
+
+    /** Alias for ${order.status} in JSP EL (same as orderStatus). */
+    public String getStatus()                        { return orderStatus; }
+
 
     public Order() {}
 

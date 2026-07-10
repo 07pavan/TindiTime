@@ -17,8 +17,14 @@ public class User implements Serializable {
     private String phone;
     private String address;
     private String role;
+    private boolean isBanned;           // maps to is_banned column
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    // Transient admin-display fields (computed via SQL, not persisted)
+    private int    totalOrders;
+    private double totalSpend;
+    private String registeredDate;      // formatted created_at for JSP display
 
     // Constructors
     public User() {}
@@ -82,13 +88,20 @@ public class User implements Serializable {
         this.address = address;
     }
 
-    public String getRole() {
-        return role;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+    public boolean isBanned() { return isBanned; }
+    public void setIsBanned(boolean isBanned) { this.isBanned = isBanned; }
+
+    public int getTotalOrders() { return totalOrders; }
+    public void setTotalOrders(int totalOrders) { this.totalOrders = totalOrders; }
+
+    public double getTotalSpend() { return totalSpend; }
+    public void setTotalSpend(double totalSpend) { this.totalSpend = totalSpend; }
+
+    public String getRegisteredDate() { return registeredDate; }
+    public void setRegisteredDate(String registeredDate) { this.registeredDate = registeredDate; }
 
     public Timestamp getCreatedAt() {
         return createdAt;
