@@ -15,11 +15,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Order from ${restaurant.name} — Browse the menu and add to cart on HungryGO.">
-    <title><c:out value="${restaurant.name}" /> | HungryGO Delivery</title>
+    <meta name="description" content="Order from ${restaurant.name} — Browse the menu and add to cart on TindiTime.">
+    <title><c:out value="${restaurant.name}" /> | TindiTime Delivery</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-menu">
 
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-7 d-flex flex-column justify-content-center p-4 p-lg-5">
                     <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge bg-orange px-2 py-1 fs-8 fw-bold">PROMOTED</span>
+                        <span class="badge bg-orange px-2 py-1 fs-8 fw-bold" style="color: var(--color-deep-forest) !important; background-color: var(--color-lime-glow) !important;">PROMOTED</span>
                         <div class="badge bg-success d-flex align-items-center gap-1">
                             <i class="bi bi-star-fill text-white fs-8"></i>
                             <c:out value="${restaurant.rating}" /> (500+ ratings)
@@ -106,7 +106,7 @@
                 <div class="card border-0 shadow-sm p-3 sticky-top rounded-3" style="top: 100px;" id="menu-cat-sidebar">
                     <h6 class="fw-bold text-dark mb-3 text-uppercase border-bottom pb-2 fs-7">Categories</h6>
                     <ul class="nav flex-column gap-2 font-medium fs-7" id="sidebar-categories-list">
-                        <li><a href="#section-recommended" class="nav-link text-orange p-2 rounded hover-orange"><i class="bi bi-bookmark-star-fill me-2"></i>Recommended</a></li>
+                        <li><a href="#section-recommended" class="nav-link p-2 rounded hover-orange" style="color: var(--color-deep-forest) !important; font-weight: 700;"><i class="bi bi-bookmark-star-fill me-2"></i>Recommended</a></li>
                         <li><a href="#section-combos"      class="nav-link text-dark p-2 rounded hover-orange"><i class="bi bi-bag-plus me-2"></i>Saver Combos</a></li>
                         <li><a href="#section-beverages"   class="nav-link text-dark p-2 rounded hover-orange"><i class="bi bi-cup-straw me-2"></i>Beverages</a></li>
                     </ul>
@@ -140,7 +140,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <h5 class="fw-bold text-dark mb-1"><c:out value="${item.name}" /></h5>
-                                    <div class="fw-bold text-orange mb-2 font-mono">₹<c:out value="${item.price}" /></div>
+                                    <div class="fw-bold mb-2 font-mono" style="color: var(--color-deep-forest) !important;">₹<c:out value="${item.price}" /></div>
                                     <p class="text-muted small mb-0 d-none d-sm-block">
                                         <c:out value="${item.description}" />
                                     </p>

@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gourmet Cheddar Bacon Burger Details | HungryGO</title>
+    <title>Gourmet Cheddar Bacon Burger Details | TindiTime</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-burger-detail">
 
@@ -44,7 +44,7 @@
                             <span class="text-muted small fw-bold tracking-wider uppercase">BURGERS & SLIDERS</span>
                         </div>
                         <h1 class="display-5 text-dark fw-bold font-display mb-2">Gourmet Cheddar Bacon Burger</h1>
-                        <h2 class="text-orange fw-bold font-mono mb-4 fs-2" id="burger-display-price">₹440.00</h2>
+                        <h2 class="fw-bold font-mono mb-4 fs-2" style="color: var(--color-deep-forest) !important;" id="burger-display-price">₹440.00</h2>
                         
                         <h6 class="fw-bold text-dark mb-2">Description</h6>
                         <p class="text-muted small leading-relaxed mb-4">
@@ -63,7 +63,7 @@
 
                         <!-- CUSTOMIZATION OPTIONS FOR CUSTOMER -->
                         <div class="bg-light p-3 rounded-3 border mb-4">
-                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-sliders me-1 text-orange"></i> Customize Your Order</h6>
+                            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-sliders me-1" style="color: var(--color-deep-forest) !important;"></i> Customize Your Order</h6>
                             
                             <div class="form-check d-flex justify-content-between align-items-center mb-2 fs-7">
                                 <div>
@@ -100,7 +100,7 @@
                             </div>
 
                             <!-- Cart Add Button -->
-                            <button type="submit" class="btn btn-orange flex-grow-1 py-3 rounded-4 fw-bold fs-5 shadow-md">
+                            <button type="submit" class="btn btn-forest-primary flex-grow-1 py-3 fs-5 shadow-sm">
                                 Add to Basket (<span id="cart-cost-display" class="font-mono">₹440.00</span>)
                             </button>
                         </div>
@@ -199,14 +199,14 @@
                     if (!data) return;
                     if (data.success) {
                         if (btn) {
-                            btn.classList.remove('btn-orange');
+                            btn.classList.remove('btn-forest-primary');
                             btn.classList.add('btn-success');
                             btn.innerHTML = '<i class="bi bi-check-lg"></i> Added to Cart!';
                             setTimeout(function () {
                                 btn.disabled = false;
                                 btn.innerHTML = origHtml;
                                 btn.classList.remove('btn-success');
-                                btn.classList.add('btn-orange');
+                                btn.classList.add('btn-forest-primary');
                             }, 1800);
                         }
                         var cartSize = data.cartSize;

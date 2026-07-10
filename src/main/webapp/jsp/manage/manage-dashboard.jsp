@@ -23,137 +23,131 @@
     /* ── KPI Cards ──────────────────────────────── */
     .kpi-card {
         background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
+        border: 1px solid rgba(140,140,130,0.2);
+        border-radius: 20px;
         padding: 1.4rem 1.5rem;
         display: flex;
         align-items: center;
         gap: 1.1rem;
         transition: box-shadow .2s, transform .2s;
     }
-    .kpi-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
+    .kpi-card:hover { box-shadow: rgba(14,21,14,0.1) 0 8px 24px -4px; transform: translateY(-2px); }
     .kpi-icon {
         width: 52px; height: 52px;
-        border-radius: 13px;
+        border-radius: 14px;
         display: flex; align-items: center; justify-content: center;
         font-size: 1.4rem;
         flex-shrink: 0;
     }
-    .kpi-icon.orange { background: #fff7ed; color: #f97316; }
-    .kpi-icon.green  { background: #f0fdf4; color: #22c55e; }
-    .kpi-icon.blue   { background: #eff6ff; color: #3b82f6; }
-    .kpi-icon.purple { background: #faf5ff; color: #a855f7; }
-    .kpi-icon.red    { background: #fef2f2; color: #ef4444; }
-    .kpi-icon.teal   { background: #f0fdfa; color: #14b8a6; }
+    .kpi-icon.orange { background: rgba(230,255,85,0.25); color: #5c6a00; }
+    .kpi-icon.green  { background: rgba(0,71,60,0.1);    color: #00473c; }
+    .kpi-icon.blue   { background: #d8e5d6;              color: #00473c; }
+    .kpi-icon.purple { background: rgba(0,71,60,0.07);   color: #00473c; }
+    .kpi-icon.red    { background: rgba(192,57,43,0.1);  color: #c0392b; }
+    .kpi-icon.teal   { background: rgba(0,71,60,0.12);   color: #00473c; }
 
-    .kpi-body {}
-    .kpi-label { font-size: .75rem; font-weight: 600; color: #6b7280; letter-spacing: .3px; text-transform: uppercase; }
-    .kpi-value { font-size: 1.7rem; font-weight: 800; color: #111827; line-height: 1.1; }
-    .kpi-sub   { font-size: .72rem; color: #9ca3af; margin-top: .15rem; }
-    .kpi-trend { font-size: .72rem; font-weight: 700; padding: 2px 7px; border-radius: 99px; }
-    .kpi-trend.up   { background: #f0fdf4; color: #16a34a; }
-    .kpi-trend.down { background: #fef2f2; color: #dc2626; }
-    .kpi-trend.neutral { background: #f9fafb; color: #6b7280; }
+    .kpi-label { font-size: .72rem; font-weight: 700; color: #8c8c82; letter-spacing: .06em; text-transform: uppercase; }
+    .kpi-value { font-size: 1.7rem; font-weight: 800; color: #0e150e; line-height: 1.1; letter-spacing: -0.5px; }
+    .kpi-sub   { font-size: .72rem; color: #8c8c82; margin-top: .15rem; }
+    .kpi-trend { font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+    .kpi-trend.up      { background: rgba(0,71,60,0.1);  color: #00473c; }
+    .kpi-trend.down    { background: rgba(192,57,43,0.1); color: #c0392b; }
+    .kpi-trend.neutral { background: rgba(140,140,130,0.15); color: #555; }
 
     /* ── Section Card ───────────────────────────── */
     .section-card {
         background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
+        border: 1px solid rgba(140,140,130,0.2);
+        border-radius: 20px;
         overflow: hidden;
     }
     .section-card-header {
         padding: 1.1rem 1.5rem;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid rgba(140,140,130,0.15);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
     }
-    .section-card-title { font-size: .95rem; font-weight: 700; color: #111827; margin: 0; }
+    .section-card-title { font-size: .95rem; font-weight: 700; color: #0e150e; margin: 0; }
     .section-card-body  { padding: 0; }
 
     /* ── Orders Table ───────────────────────────── */
     .manage-table { font-size: .85rem; margin: 0; }
     .manage-table thead th {
-        background: #f9fafb;
-        font-size: .7rem;
+        background: rgba(0,71,60,0.04);
+        font-size: .68rem;
         font-weight: 700;
-        letter-spacing: .6px;
+        letter-spacing: .08em;
         text-transform: uppercase;
-        color: #9ca3af;
-        border-bottom: 1px solid #f3f4f6;
+        color: #8c8c82;
+        border-bottom: 1px solid rgba(140,140,130,0.18);
         padding: .75rem 1.25rem;
         white-space: nowrap;
     }
     .manage-table tbody td {
         padding: .85rem 1.25rem;
-        color: #374151;
+        color: #0e150e;
         vertical-align: middle;
-        border-bottom: 1px solid #f9fafb;
+        border-bottom: 1px solid rgba(140,140,130,0.12);
     }
     .manage-table tbody tr:last-child td { border-bottom: none; }
-    .manage-table tbody tr:hover td { background: #fafafa; }
+    .manage-table tbody tr:hover td { background: rgba(0,71,60,0.03); }
 
     /* Status badges */
     .status-badge {
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        font-size: .72rem;
+        font-size: .7rem;
         font-weight: 700;
         padding: 3px 10px;
         border-radius: 99px;
         white-space: nowrap;
     }
-    .status-badge::before {
-        content: '';
-        width: 6px; height: 6px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .status-badge.placed     { background: #eff6ff; color: #3b82f6; }
-    .status-badge.placed::before     { background: #3b82f6; }
-    .status-badge.confirmed  { background: #fff7ed; color: #f97316; }
-    .status-badge.confirmed::before  { background: #f97316; }
-    .status-badge.preparing  { background: #fefce8; color: #ca8a04; }
-    .status-badge.preparing::before  { background: #ca8a04; }
-    .status-badge.out-delivery { background: #f0fdf4; color: #16a34a; }
-    .status-badge.out-delivery::before { background: #16a34a; }
-    .status-badge.delivered  { background: #f0fdf4; color: #15803d; }
-    .status-badge.delivered::before  { background: #15803d; }
-    .status-badge.cancelled  { background: #fef2f2; color: #dc2626; }
-    .status-badge.cancelled::before  { background: #dc2626; }
+    .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .status-badge.placed        { background: rgba(0,71,60,0.08);    color: #00473c; }
+    .status-badge.placed::before        { background: #00473c; }
+    .status-badge.confirmed     { background: rgba(230,255,85,0.25); color: #5c6a00; }
+    .status-badge.confirmed::before     { background: #a8b400; }
+    .status-badge.preparing     { background: rgba(230,255,85,0.2);  color: #5c6a00; }
+    .status-badge.preparing::before     { background: #c2b800; }
+    .status-badge.out-delivery  { background: rgba(0,71,60,0.1);     color: #00473c; }
+    .status-badge.out-delivery::before  { background: #00473c; }
+    .status-badge.delivered     { background: rgba(0,71,60,0.12);    color: #00473c; }
+    .status-badge.delivered::before     { background: #00473c; }
+    .status-badge.cancelled     { background: rgba(192,57,43,0.1);   color: #c0392b; }
+    .status-badge.cancelled::before     { background: #c0392b; }
 
     /* Avatar chip */
     .user-chip { display: flex; align-items: center; gap: .5rem; }
     .chip-avatar {
         width: 30px; height: 30px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #f97316, #ea580c);
-        color: #fff;
+        background: #00473c;
+        color: #e6ff55;
         font-size: .7rem;
         font-weight: 700;
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
     }
-    .chip-name  { font-weight: 600; color: #111827; font-size: .82rem; }
-    .chip-email { font-size: .72rem; color: #9ca3af; }
+    .chip-name  { font-weight: 600; color: #0e150e; font-size: .82rem; }
+    .chip-email { font-size: .72rem; color: #8c8c82; }
 
     /* Quick action button */
-    .btn-action {
+    .btn-action-sm {
         font-size: .75rem;
         font-weight: 600;
-        padding: 4px 10px;
-        border-radius: 7px;
-        border: 1px solid #e5e7eb;
-        background: #fff;
-        color: #374151;
+        padding: 4px 12px;
+        border-radius: 99px;
+        border: 1.5px solid rgba(140,140,130,0.4);
+        background: transparent;
+        color: #555;
         text-decoration: none;
         transition: border-color .15s, color .15s;
         white-space: nowrap;
     }
-    .btn-action:hover { border-color: #f97316; color: #f97316; }
+    .btn-action-sm:hover { border-color: #00473c; color: #00473c; }
 
     /* ── Activity Feed ──────────────────────────── */
     .activity-item {
@@ -161,20 +155,21 @@
         align-items: flex-start;
         gap: .85rem;
         padding: .85rem 1.25rem;
-        border-bottom: 1px solid #f9fafb;
+        border-bottom: 1px solid rgba(140,140,130,0.12);
     }
     .activity-item:last-child { border-bottom: none; }
     .activity-icon {
         width: 34px; height: 34px;
-        border-radius: 9px;
+        border-radius: 10px;
         display: flex; align-items: center; justify-content: center;
         font-size: .9rem;
         flex-shrink: 0;
         margin-top: .1rem;
     }
-    .activity-body .activity-text { font-size: .82rem; color: #374151; font-weight: 500; }
-    .activity-body .activity-time { font-size: .72rem; color: #9ca3af; margin-top: .15rem; }
+    .activity-body .activity-text { font-size: .82rem; color: #0e150e; font-weight: 500; }
+    .activity-body .activity-time { font-size: .72rem; color: #8c8c82; margin-top: .15rem; }
 </style>
+
 
 <%-- ══════════════════════════════════════════ --%>
 <%-- PAGE HEADER                                --%>
@@ -185,12 +180,12 @@
             Good day, ${not empty sessionScope.userName ? sessionScope.userName : 'Admin'} 👋
         </h1>
         <p class="text-muted mb-0" style="font-size:.85rem;">
-            Here is what is happening with HungryGO today.
+            Here is what is happening with TindiTime today.
         </p>
     </div>
     <a href="${pageContext.request.contextPath}/manage/orders"
        class="btn btn-sm fw-semibold text-white d-flex align-items-center gap-2"
-       style="background:#f97316;border:none;border-radius:10px;padding:.5rem 1.1rem;font-size:.83rem;"
+       style="background:#00473c;border:none;border-radius:99px;padding:.5rem 1.1rem;font-size:.83rem;"
        id="dash-view-orders-btn">
         <i class="bi bi-receipt-cutoff"></i> View All Orders
     </a>

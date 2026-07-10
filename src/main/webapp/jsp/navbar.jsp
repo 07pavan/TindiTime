@@ -1,106 +1,250 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <%--
-    NAVBAR COMPONENT
+    NAVBAR COMPONENT — Sweetgreen Design System
     MVC: reads from sessionScope ONLY — no DB access, no DAO, no scriptlets.
     All links use contextPath-relative servlet URLs.
     Included via <jsp:include> from every JSP page.
 --%>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-2" id="main-navbar">
+
+<style>
+/* ── Inline Navbar overrides (highest priority) ── */
+#main-navbar {
+  background: var(--color-cream-canvas) !important;
+  border-bottom: 1px solid rgba(140,140,130,0.25) !important;
+  box-shadow: none !important;
+  padding: 14px 0 !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.navbar-brand-hg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.navbar-brand-hg .logo-icon {
+  width: 38px; height: 38px;
+  background: var(--color-lime-glow);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-forest-shadow);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.navbar-brand-hg .logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-deep-forest);
+  letter-spacing: -0.5px;
+}
+.navbar-brand-hg .logo-text span { color: var(--color-forest-shadow); }
+
+.nav-delivery-loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--color-sage-mist);
+  border-radius: 99px;
+  font-size: 13px;
+  color: var(--color-forest-shadow);
+  font-weight: 500;
+  max-width: 220px;
+}
+.nav-delivery-loc i { color: var(--color-deep-forest); flex-shrink:0; }
+.nav-delivery-loc span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+#main-navbar .nav-link-hg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-forest-shadow) !important;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.15s, background-color 0.15s;
+  white-space: nowrap;
+}
+#main-navbar .nav-link-hg:hover,
+#main-navbar .nav-link-hg.active {
+  opacity: 1;
+  background: rgba(0,71,60,0.07);
+  color: var(--color-deep-forest) !important;
+}
+#main-navbar .nav-link-hg i { font-size: 1rem; }
+
+/* Cart button in nav */
+.nav-cart-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-deep-forest) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 99px !important;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 20px;
+  text-decoration: none;
+  transition: background-color 0.18s, transform 0.15s;
+}
+.nav-cart-btn:hover {
+  background: var(--color-forest-shadow) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+.nav-cart-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px; height: 20px;
+  background: var(--color-lime-glow);
+  color: var(--color-forest-shadow);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* User dropdown avatar */
+.nav-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1.5px solid rgba(0,71,60,0.3);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--color-forest-shadow) !important;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.nav-user-trigger:hover {
+  border-color: var(--color-deep-forest);
+  background: rgba(0,71,60,0.05);
+  color: var(--color-deep-forest) !important;
+}
+.nav-avatar-dot {
+  width: 26px; height: 26px;
+  background: var(--color-deep-forest);
+  color: var(--color-lime-glow);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Mobile toggler */
+.hg-toggler {
+  background: transparent;
+  border: 1.5px solid rgba(0,71,60,0.3);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--color-forest-shadow);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.hg-toggler:hover { background: rgba(0,71,60,0.06); }
+</style>
+
+<nav class="navbar navbar-expand-lg" id="main-navbar" aria-label="Main navigation">
     <div class="container">
-        <!-- Logo → HomeServlet /index -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-decoration-none"
-           href="${pageContext.request.contextPath}/index" id="nav-brand-logo">
-            <div class="logo-box d-flex align-items-center justify-content-center text-white rounded-3 shadow-sm bg-orange"
-                 style="width: 38px; height: 38px;">
-                <i class="bi bi-lightning-charge-fill fs-5"></i>
+
+        <a class="navbar-brand-hg" href="${pageContext.request.contextPath}/index" id="nav-brand-logo">
+            <div class="logo-icon" style="background: transparent;">
+                <img src="${pageContext.request.contextPath}/jsp/logo.png" alt="TindiTime Logo" style="height: 38px; width: 38px; object-fit: contain; border-radius: 8px;">
             </div>
-            <span class="fs-4 tracking-tight text-dark">Hungry<span class="text-orange">GO</span></span>
+            <span class="logo-text" style="font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.5px; color: var(--color-deep-forest);">Tindi<span style="color: var(--color-forest-shadow);">Time</span></span>
         </a>
 
-        <!-- Delivery Address from session -->
-        <div class="d-none d-md-flex align-items-center ms-4 text-truncate"
-             style="max-width: 250px;" id="nav-location-selector">
-            <i class="bi bi-geo-alt-fill text-orange me-2"></i>
-            <span class="text-muted small fw-medium">Deliver to: </span>
-            <span class="ms-1 text-dark small fw-bold text-truncate" id="current-delivery-address">
+        <!-- Delivery Address -->
+        <div class="d-none d-lg-flex nav-delivery-loc ms-3" id="nav-location-selector">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span id="current-delivery-address">
                 <c:choose>
                     <c:when test="${not empty sessionScope.address}">
                         <c:out value="${sessionScope.address}" />
                     </c:when>
-                    <c:otherwise>Select Location...</c:otherwise>
+                    <c:otherwise>Select Location</c:otherwise>
                 </c:choose>
             </span>
         </div>
 
-        <button class="navbar-toggler border-0 shadow-none" type="button"
+        <!-- Mobile toggler -->
+        <button class="hg-toggler d-lg-none ms-auto" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarContent"
                 aria-controls="navbarContent" aria-expanded="false"
                 aria-label="Toggle navigation" id="navbar-hamburger-btn">
-            <span class="navbar-toggler-icon"></span>
+            <i class="bi bi-list"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto align-items-center gap-lg-3 mt-3 mt-lg-0">
+            <ul class="navbar-nav ms-auto align-items-center gap-1 mt-3 mt-lg-0">
 
-                <!-- Search → RestaurantServlet -->
+                <!-- Search -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded-2 fw-medium text-dark hover-orange"
-                       href="${pageContext.request.contextPath}/restaurants" id="nav-link-search">
-                        <i class="bi bi-search fs-5"></i>
+                    <a class="nav-link-hg" href="${pageContext.request.contextPath}/restaurants" id="nav-link-search">
+                        <i class="bi bi-search"></i>
                         <span>Search</span>
                     </a>
                 </li>
 
-                <!-- Offers → RestaurantServlet with filter param -->
+                <!-- Orders -->
                 <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded-2 fw-medium text-dark hover-orange"
-                       href="${pageContext.request.contextPath}/restaurants?filter=offers" id="nav-link-offers">
-                        <i class="bi bi-percent fs-5"></i>
-                        <span>Offers</span>
-                    </a>
-                </li>
-
-                <!-- Orders → OrderServlet -->
-                <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded-2 fw-medium text-dark hover-orange"
-                       href="${pageContext.request.contextPath}/orders" id="nav-link-orders">
-                        <i class="bi bi-journal-text fs-5"></i>
+                    <a class="nav-link-hg" href="${pageContext.request.contextPath}/orders" id="nav-link-orders">
+                        <i class="bi bi-journal-text"></i>
                         <span>Orders</span>
                     </a>
                 </li>
 
-                <!-- Logged-in user dropdown OR Sign In link -->
+                <!-- User: logged-in dropdown OR Sign In -->
                 <c:choose>
                     <c:when test="${not empty sessionScope.username}">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 px-3 py-2 rounded-2 fw-medium text-dark"
-                               href="#" id="userDropdown" role="button"
+                            <a class="nav-user-trigger" href="#" id="userDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-5 text-orange"></i>
-                                <span class="text-truncate" style="max-width: 100px;">
+                                <span class="nav-avatar-dot">
+                                    <c:out value="${fn:substring(sessionScope.username,0,1)}" default="U"/>
+                                </span>
+                                <span class="d-none d-md-inline text-truncate" style="max-width:90px;">
                                     <c:out value="${sessionScope.username}" />
                                 </span>
+                                <i class="bi bi-chevron-down" style="font-size:10px;opacity:0.6;"></i>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-3"
-                                aria-labelledby="userDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
-                                    <a class="dropdown-item rounded-2 py-2"
-                                       href="${pageContext.request.contextPath}/profile">
-                                        <i class="bi bi-person me-2 text-muted"></i>My Profile
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/profile">
+                                        <i class="bi bi-person me-2"></i>My Profile
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item rounded-2 py-2"
-                                       href="${pageContext.request.contextPath}/orders">
-                                        <i class="bi bi-bag-check me-2 text-muted"></i>My Orders
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/orders">
+                                        <i class="bi bi-bag-check me-2"></i>My Orders
                                     </a>
                                 </li>
+                                <c:if test="${sessionScope.role == 'SUPER_ADMIN' or sessionScope.role == 'RESTAURANT_OWNER'}">
+                                <li>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/manage/dashboard">
+                                        <i class="bi bi-grid-3x3-gap me-2"></i>Admin Panel
+                                    </a>
+                                </li>
+                                </c:if>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item rounded-2 py-2 text-danger"
-                                       href="${pageContext.request.contextPath}/login?action=logout">
+                                    <a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/login?action=logout">
                                         <i class="bi bi-box-arrow-right me-2"></i>Sign Out
                                     </a>
                                 </li>
@@ -109,26 +253,25 @@
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2 px-3 py-2 rounded-2 fw-medium text-dark hover-orange"
-                               href="${pageContext.request.contextPath}/login" id="nav-link-signin">
-                                <i class="bi bi-person fs-5"></i>
+                            <a class="nav-link-hg" href="${pageContext.request.contextPath}/login" id="nav-link-signin">
+                                <i class="bi bi-person"></i>
                                 <span>Sign In</span>
                             </a>
                         </li>
                     </c:otherwise>
                 </c:choose>
 
-                <!-- Cart Button → CartServlet, badge from session -->
-                <li class="nav-item ms-lg-2">
-                    <a class="btn btn-orange d-flex align-items-center gap-2 px-4 py-2 rounded-3 text-white fw-semibold position-relative shadow-sm hover-up"
-                       href="${pageContext.request.contextPath}/cart" id="nav-link-cart">
-                        <i class="bi bi-cart3 fs-5"></i>
+                <!-- Cart Button -->
+                <li class="nav-item ms-1">
+                    <a class="nav-cart-btn" href="${pageContext.request.contextPath}/cart" id="nav-link-cart">
+                        <i class="bi bi-cart3"></i>
                         <span>Cart</span>
-                        <span class="badge bg-white text-orange rounded-pill font-mono fs-7 px-2 py-1" id="nav-cart-badge">
+                        <span class="nav-cart-badge" id="nav-cart-badge">
                             <c:out value="${not empty sessionScope.cartSize ? sessionScope.cartSize : 0}" />
                         </span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>
@@ -141,11 +284,11 @@
         <div class="floating-cart-info">
             <span class="cart-icon-wrapper"><i class="bi bi-cart3"></i></span>
             <span id="floating-cart-text" class="fw-bold">
-                <span id="floating-cart-qty">${cartSize}</span> ${cartSize == 1 ? 'Item' : 'Items'} Selected
+                <span id="floating-cart-qty">${cartSize}</span> ${cartSize == 1 ? 'Item' : 'Items'} in Cart
             </span>
         </div>
-        <a href="${pageContext.request.contextPath}/cart" class="btn btn-orange btn-order rounded-pill fw-bold" id="floating-cart-order-btn">
-            Order Now <i class="bi bi-arrow-right-short ms-1"></i>
+        <a href="${pageContext.request.contextPath}/cart" class="btn btn-orange btn-order" id="floating-cart-order-btn">
+            View Order <i class="bi bi-arrow-right-short"></i>
         </a>
     </div>
 </div>
@@ -161,33 +304,26 @@
 
     var bottomBar = document.getElementById('floating-cart-bar');
 
-    /* Hide bar on checkout / auth pages immediately */
     if (shouldHide && bottomBar) {
         bottomBar.style.setProperty('display', 'none', 'important');
     }
 
-    /* ----------------------------------------------------------
-       updateCartUI(cartSize)
-       Called after a successful AJAX add — updates badge + bar
-    ---------------------------------------------------------- */
     window.updateCartUI = function(cartSize) {
-        /* 1. Navbar badge */
         var badge = document.getElementById('nav-cart-badge');
         if (badge) {
             badge.innerText = cartSize;
             badge.classList.remove('pulse-animation');
-            void badge.offsetWidth;          /* reflow trick to restart animation */
+            void badge.offsetWidth;
             badge.classList.add('pulse-animation');
         }
 
-        /* 2. Floating bar */
         var bar = document.getElementById('floating-cart-bar');
         if (bar && !shouldHide) {
             var textSpan = document.getElementById('floating-cart-text');
             if (textSpan) {
                 textSpan.innerHTML =
-                    '<span id="floating-cart-qty" class="font-mono">' + cartSize + '</span> ' +
-                    (cartSize === 1 ? 'Item' : 'Items') + ' Selected';
+                    '<span id="floating-cart-qty">' + cartSize + '</span> ' +
+                    (cartSize === 1 ? 'Item' : 'Items') + ' in Cart';
             }
             if (cartSize > 0) {
                 bar.classList.remove('d-none');
@@ -199,13 +335,6 @@
         }
     };
 
-    /* ----------------------------------------------------------
-       initCartForms()
-       Call this at the BOTTOM of any page that has Add-to-cart
-       forms (menu.jsp, burger-detail.jsp, index.jsp …).
-       It scans for forms with action="/cart" + input[name=action]=add
-       and wires up the AJAX intercept on each one.
-    ---------------------------------------------------------- */
     window.initCartForms = function() {
         var forms = Array.from(document.querySelectorAll('form')).filter(function(f) {
             var action = f.getAttribute('action') || '';
@@ -214,7 +343,6 @@
         });
 
         forms.forEach(function(form) {
-            /* Guard: don't attach twice */
             if (form.dataset.ajaxBound === '1') return;
             form.dataset.ajaxBound = '1';
 
@@ -225,7 +353,6 @@
                 var origHtml = btn ? btn.innerHTML : '';
                 var isOutline = btn ? btn.classList.contains('btn-outline-orange') : false;
 
-                /* Show loading state */
                 if (btn) {
                     btn.disabled = true;
                     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Adding...';
@@ -253,7 +380,6 @@
                 })
                 .then(function(data) {
                     if (data && data.success) {
-                        /* Green checkmark state on button */
                         if (btn) {
                             btn.classList.remove('btn-outline-orange', 'btn-orange');
                             btn.classList.add('btn-success');

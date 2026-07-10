@@ -10,13 +10,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Basket | HungryGO Cart</title>
+    <title>Your Basket | TindiTime Cart</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-cart">
 
@@ -50,7 +50,7 @@
             <div class="col-lg-8" id="cart-items-column">
                 <div class="card border-0 shadow-sm rounded-4 p-4" id="cart-info-card">
                     <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                        <h4 class="fw-bold text-dark mb-0 font-display"><i class="bi bi-cart3 me-2 text-orange"></i> Shopping Cart</h4>
+                        <h4 class="fw-bold text-dark mb-0 font-display"><i class="bi bi-cart3 me-2" style="color: var(--color-deep-forest) !important;"></i> Shopping Cart</h4>
                         <span class="badge bg-light text-dark border px-3 py-1.5 rounded-pill fw-bold" id="cart-item-count">
                             <c:out value="${sessionScope.cartSize}" /> <c:out value="${sessionScope.cartSize == 1 ? 'Item' : 'Items'}" />
                         </span>
@@ -94,17 +94,17 @@
 
                         <c:if test="${empty cartItems}">
                             <div class="text-center py-5">
-                                <i class="bi bi-basket-fill text-muted display-4 mb-3 text-orange"></i>
+                                <i class="bi bi-basket-fill text-muted display-4 mb-3" style="color: var(--color-deep-forest) !important;"></i>
                                 <h5 class="fw-bold text-secondary">Your cart is empty!</h5>
                                 <p class="text-muted small mb-3">Add some delicious dishes from your favorite local restaurant!</p>
-                                <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-orange px-4 py-2 rounded-3 fw-bold decoration-none text-white shadow">Explore Restaurants</a>
+                                <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-orange px-4 py-2 rounded-pill fw-bold text-decoration-none shadow" style="color: var(--color-deep-forest) !important; background-color: var(--color-lime-glow) !important; border: none;">Explore Restaurants</a>
                             </div>
                         </c:if>
                     </div>
 
                     <!-- Actions back to menu -->
                     <div class="pt-4 border-top mt-4 d-flex justify-content-between align-items-center">
-                        <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-outline-orange px-4 py-2.5 rounded-3 fw-bold fs-7 text-decoration-none">
+                        <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-outline-orange px-4 py-2.5 rounded-pill fw-bold fs-7 text-decoration-none">
                             <i class="bi bi-arrow-left me-1"></i> Continue Shopping
                         </a>
                         <form action="${pageContext.request.contextPath}/cart" method="POST" class="d-inline">
@@ -124,7 +124,7 @@
                     <h6 class="fw-bold text-dark mb-3">Have a promocode?</h5>
                     <div class="d-flex gap-2">
                         <input type="text" class="form-control rounded-3 py-2.5 text-uppercase fw-bold font-mono text-center border" placeholder="QKBITE20" id="coupon-code-input">
-                        <button class="btn btn-orange px-3 py-2.5 rounded-3 fw-bold" onclick="applyPromo()">Apply</button>
+                        <button class="btn btn-orange px-4 py-2.5 rounded-pill fw-bold" onclick="applyPromo()">Apply</button>
                     </div>
                     
                     <c:if test="${promoApplied}">
@@ -160,10 +160,10 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fw-bold fs-6 text-dark">Grand Total</span>
-                        <span class="fw-extrabold fs-5 text-orange font-mono" id="val-grand-total">₹<c:out value="${gtotal}" /></span>
+                        <span class="fw-extrabold fs-5 font-mono" id="val-grand-total" style="color: var(--color-deep-forest) !important;">₹<c:out value="${gtotal}" /></span>
                     </div>
 
-                    <a href="${pageContext.request.contextPath}/checkout" class="btn btn-orange w-full py-3 rounded-4 fw-bold fs-5 text-decoration-none text-center shadow-md hover-up <c:if test='${empty cartItems}'>disabled</c:if>" id="btn-proceed-checkout">
+                    <a href="${pageContext.request.contextPath}/checkout" class="btn btn-forest-primary w-100 py-3 fs-5 shadow-sm hover-up <c:if test='${empty cartItems}'>disabled</c:if>" id="btn-proceed-checkout">
                         Proceed to Checkout <i class="bi bi-chevron-right ms-1"></i>
                     </a>
                 </div>

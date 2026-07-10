@@ -10,13 +10,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile | HungryGO Food Order Profile</title>
+    <title>My Profile | TindiTime Food Order Profile</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-profile">
 
@@ -29,12 +29,12 @@
             <div class="col-lg-3 d-none d-lg-block" id="profile-dashboard-sidebar">
                 <div class="card border-0 shadow-sm p-3 rounded-4" id="profile-links-card">
                     <div class="text-center p-3 border-bottom mb-3" id="profile-sideuser-avatar">
-                        <i class="bi bi-person-circle display-4 text-orange mb-2 animate-pulse"></i>
+                        <i class="bi bi-person-circle display-4 mb-2 animate-pulse" style="color: var(--color-deep-forest) !important;"></i>
                         <h6 class="fw-bold mb-0 text-dark"><c:out value="${not empty sessionScope.username ? sessionScope.username : 'Pavan Hegade'}" /></h6>
                         <span class="fs-8 text-muted"><c:out value="${not empty sessionScope.email ? sessionScope.email : 'pavanhegade1232@gmail.com'}" /></span>
                     </div>
                     <div class="d-flex flex-column gap-2">
-                        <a href="${pageContext.request.contextPath}/profile" class="profile-sidebar-item active" id="profile-side-link-main"><i class="bi bi-person text-orange"></i> My Profile</a>
+                        <a href="${pageContext.request.contextPath}/profile" class="profile-sidebar-item active" id="profile-side-link-main"><i class="bi bi-person" style="color: var(--color-deep-forest) !important;"></i> My Profile</a>
                         <a href="${pageContext.request.contextPath}/orders" class="profile-sidebar-item" id="profile-side-link-orders"><i class="bi bi-journal-text text-muted"></i> My Orders</a>
                         <a href="${pageContext.request.contextPath}/login?action=logout" class="profile-sidebar-item text-danger" id="profile-side-link-logout"><i class="bi bi-box-arrow-right"></i> Log Out</a>
                     </div>
@@ -72,7 +72,7 @@
                     <!-- Column 1: Personal User Information Form -->
                     <div class="col-md-7">
                         <div class="card border-0 shadow-sm rounded-4 p-4 h-100" id="personal-info-card">
-                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-person-fill me-2 text-orange"></i> Edit Profile Information</h4>
+                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-person-fill me-2" style="color: var(--color-deep-forest) !important;"></i> Edit Profile Information</h4>
                             
                             <!-- Submits profile changes to update session variables dynamically -->
                             <form action="${pageContext.request.contextPath}/profile" method="POST" id="profile-form">
@@ -111,7 +111,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-orange w-100 py-3 rounded-3 fw-bold fs-6 shadow-sm hover-up">
+                                <button type="submit" class="btn btn-orange w-100 py-3 rounded-pill fw-bold fs-6 shadow-sm hover-up">
                                     Update Profile Settings <i class="bi bi-check-circle ms-1"></i>
                                 </button>
                             </form>
@@ -122,7 +122,7 @@
                     <div class="col-md-5">
                         <div class="card border-0 shadow-sm rounded-4 p-4 h-100 d-flex flex-column justify-content-between" id="password-change-card">
                             <div class="text-start">
-                                <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-shield-lock-fill me-2 text-orange"></i> Change Password</h4>
+                                <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-shield-lock-fill me-2" style="color: var(--color-deep-forest) !important;"></i> Change Password</h4>
                                 
                                 <form action="${pageContext.request.contextPath}/profile" method="POST" id="password-form" onsubmit="return validatePasswords()">
                                     <input type="hidden" name="action" value="changePassword">
@@ -142,7 +142,7 @@
                                         <input type="password" name="confirmPassword" class="form-control rounded-3 py-2" placeholder="••••••••" required id="profile-confirm-pwd">
                                     </div>
 
-                                    <button type="submit" class="btn btn-outline-orange w-100 py-2.5 rounded-3 fw-bold fs-7 hover-up">
+                                    <button type="submit" class="btn btn-outline-orange w-100 py-2.5 rounded-pill fw-bold fs-7 hover-up">
                                         Change Safe Password
                                     </button>
                                 </form>
@@ -161,7 +161,7 @@
                     <!-- Profile Tab Panel -->
                     <div class="tab-pane fade show active" id="panel-profile-info" role="tabpanel" aria-labelledby="tab-profile">
                         <div class="card border-0 shadow-sm rounded-4 p-4" id="personal-info-card-resp">
-                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-person-fill me-2 text-orange"></i> Edit Profile Information</h4>
+                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-person-fill me-2" style="color: var(--color-deep-forest) !important;"></i> Edit Profile Information</h4>
                             <form action="${pageContext.request.contextPath}/profile" method="POST">
                                 <input type="hidden" name="action" value="updateProfile">
                                 
@@ -181,7 +181,7 @@
                                     <label class="form-label text-muted small fw-bold">Delivery Address</label>
                                     <textarea name="address" rows="3" class="form-control rounded-3 py-2" required><c:out value="${not empty sessionScope.address ? sessionScope.address : 'Flat 402, Sunset Heights, Bandra West, Mumbai'}" /></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-orange w-100 py-3 rounded-3 fw-bold shadow-sm">
+                                <button type="submit" class="btn btn-orange w-100 py-3 rounded-pill fw-bold shadow-sm">
                                     Update Profile Settings <i class="bi bi-check-circle ms-1"></i>
                                 </button>
                             </form>
@@ -191,7 +191,7 @@
                     <!-- Security (Password) Tab Panel -->
                     <div class="tab-pane fade" id="panel-security" role="tabpanel" aria-labelledby="tab-security">
                         <div class="card border-0 shadow-sm rounded-4 p-4" id="password-change-card-resp">
-                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-shield-lock-fill me-2 text-orange"></i> Change Password</h4>
+                            <h4 class="fw-bold mb-4 font-display text-dark border-bottom pb-2"><i class="bi bi-shield-lock-fill me-2" style="color: var(--color-deep-forest) !important;"></i> Change Password</h4>
                             <form action="${pageContext.request.contextPath}/profile" method="POST" onsubmit="return validatePasswordsResponsive()">
                                 <input type="hidden" name="action" value="changePassword">
                                 <div class="mb-3">
@@ -206,7 +206,7 @@
                                     <label class="form-label text-muted small fw-bold">Confirm New Password</label>
                                     <input type="password" name="confirmPassword" class="form-control rounded-3 py-2" placeholder="••••••••" required id="resp-confirm-pwd">
                                 </div>
-                                <button type="submit" class="btn btn-outline-orange w-100 py-2.5 rounded-3 fw-bold fs-7">
+                                <button type="submit" class="btn btn-outline-orange w-100 py-2.5 rounded-pill fw-bold fs-7">
                                     Change Safe Password
                                 </button>
                             </form>

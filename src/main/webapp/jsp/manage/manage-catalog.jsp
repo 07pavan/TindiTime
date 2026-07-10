@@ -16,8 +16,8 @@
       id, name, description, price, imageUrl, category,
       restaurantId, restaurantName, isAvailable (boolean)
 --%>
-<c:set var="pageTitle" value="Menu / Catalog"  scope="request"/>
-<c:set var="activeNav"  value="catalog"         scope="request"/>
+<c:set var="pageTitle" value="Manage Restaurant Menu"  scope="request"/>
+<c:set var="activeNav"  value="restaurants"           scope="request"/>
 
 <jsp:include page="manage-sidebar.jsp"/>
 
@@ -223,9 +223,14 @@
 </style>
 
 <%-- ══════════════════════ PAGE HEADER ══════════════════════ --%>
+<a href="${pageContext.request.contextPath}/manage/restaurants"
+   class="btn btn-sm mb-3" style="background:#eef2ff;color:#4338ca;border:1px solid #6366f1;border-radius:10px;
+          padding:.4rem 1rem;font-size:.78rem;font-weight:700;display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;text-decoration:none;">
+    <i class="bi bi-arrow-left"></i> Back to Restaurants
+</a>
 <div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3">
     <div>
-        <h1 class="fw-bold mb-1" style="font-size:1.4rem;color:#111827;">Menu / Catalog Manager</h1>
+        <h1 class="fw-bold mb-1" style="font-size:1.4rem;color:#111827;">Restaurant Menu Manager</h1>
         <p class="text-muted mb-0" style="font-size:.82rem;">
             Add, edit, or toggle availability of food items on the storefront.
         </p>

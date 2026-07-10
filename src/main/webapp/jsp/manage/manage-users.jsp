@@ -30,44 +30,44 @@
         gap:.75rem; margin-bottom:1.5rem;
     }
     .kpi-tile {
-        background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+        background:#fff; border:1px solid rgba(140,140,130,0.2); border-radius:20px;
         padding:1rem 1.1rem; display:flex; align-items:center; gap:.75rem;
     }
     .kpi-icon {
-        width:42px; height:42px; border-radius:10px;
+        width:42px; height:42px; border-radius:12px;
         display:flex; align-items:center; justify-content:center;
         font-size:1.1rem; flex-shrink:0;
     }
-    .kpi-icon.blue   { background:#eff6ff; color:#3b82f6; }
-    .kpi-icon.green  { background:#f0fdf4; color:#22c55e; }
-    .kpi-icon.orange { background:#fff7ed; color:#f97316; }
-    .kpi-icon.red    { background:#fef2f2; color:#ef4444; }
-    .kpi-value { font-size:1.4rem; font-weight:800; color:#111827; line-height:1.1; }
-    .kpi-label { font-size:.68rem; font-weight:700; color:#9ca3af;
-                 text-transform:uppercase; letter-spacing:.4px; }
+    .kpi-icon.blue   { background:#d8e5d6; color:#00473c; }
+    .kpi-icon.green  { background:rgba(0,71,60,0.1); color:#00473c; }
+    .kpi-icon.orange { background:rgba(230,255,85,0.25); color:#5c6a00; }
+    .kpi-icon.red    { background:rgba(192,57,43,0.1); color:#c0392b; }
+    .kpi-value { font-size:1.4rem; font-weight:800; color:#0e150e; line-height:1.1; }
+    .kpi-label { font-size:.68rem; font-weight:700; color:#8c8c82;
+                  text-transform:uppercase; letter-spacing:.4px; }
 
     /* ── Section card ─────────────────────────────── */
-    .section-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; }
+    .section-card { background:#fff; border:1px solid rgba(140,140,130,0.2); border-radius:20px; overflow:hidden; }
     .section-card-header {
-        padding:1rem 1.25rem; border-bottom:1px solid #f3f4f6;
+        padding:1rem 1.25rem; border-bottom:1px solid rgba(140,140,130,0.15);
         display:flex; align-items:center; justify-content:space-between;
         gap:1rem; flex-wrap:wrap;
     }
-    .section-card-title { font-size:.92rem; font-weight:700; color:#111827; margin:0; }
+    .section-card-title { font-size:.92rem; font-weight:700; color:#0e150e; margin:0; }
 
     /* ── Manage table ─────────────────────────────── */
     .manage-table { font-size:.84rem; margin:0; }
     .manage-table thead th {
-        background:#f9fafb; font-size:.68rem; font-weight:700;
-        letter-spacing:.6px; text-transform:uppercase; color:#9ca3af;
-        border-bottom:1px solid #f3f4f6; padding:.7rem 1.1rem; white-space:nowrap;
+        background:rgba(0,71,60,0.04); font-size:.68rem; font-weight:700;
+        letter-spacing:.6px; text-transform:uppercase; color:#8c8c82;
+        border-bottom:1px solid rgba(140,140,130,0.18); padding:.7rem 1.1rem; white-space:nowrap;
     }
     .manage-table tbody td {
-        padding:.85rem 1.1rem; color:#374151; vertical-align:middle;
-        border-bottom:1px solid #f9fafb;
+        padding:.85rem 1.1rem; color:#0e150e; vertical-align:middle;
+        border-bottom:1px solid rgba(140,140,130,0.12);
     }
     .manage-table tbody tr:last-child td { border-bottom:none; }
-    .manage-table tbody tr:hover td { background:#fafafa; }
+    .manage-table tbody tr:hover td { background:rgba(0,71,60,0.03); }
 
     /* ── User chip ────────────────────────────────── */
     .user-chip { display:flex; align-items:center; gap:.65rem; }
@@ -76,12 +76,12 @@
         display:flex; align-items:center; justify-content:center;
         font-size:.85rem; font-weight:800; color:#fff; flex-shrink:0;
     }
-    .user-avatar.customer { background:linear-gradient(135deg,#3b82f6,#2563eb); }
-    .user-avatar.owner    { background:linear-gradient(135deg,#22c55e,#16a34a); }
-    .user-avatar.admin    { background:linear-gradient(135deg,#f97316,#ea580c); }
-    .user-avatar.banned   { background:linear-gradient(135deg,#ef4444,#dc2626); }
-    .user-name  { font-weight:700; color:#111827; font-size:.85rem; }
-    .user-email { font-size:.72rem; color:#9ca3af; }
+    .user-avatar.customer { background:#00473c; color:#fff; }
+    .user-avatar.owner    { background:var(--color-sage-mist, #d8e5d6); color:#00473c; }
+    .user-avatar.admin    { background:var(--color-warm-sand, #e8dcc6); color:#00473c; }
+    .user-avatar.banned   { background:rgba(192,57,43,0.25); color:#c0392b; }
+    .user-name  { font-weight:700; color:#0e150e; font-size:.85rem; }
+    .user-email { font-size:.72rem; color:#8c8c82; }
 
     /* ── Role badges ──────────────────────────────── */
     .role-badge {
@@ -89,9 +89,9 @@
         font-size:.7rem; font-weight:700; padding:3px 10px;
         border-radius:99px; white-space:nowrap;
     }
-    .role-badge.customer { background:#eff6ff; color:#2563eb; }
-    .role-badge.owner    { background:#f0fdf4; color:#15803d; }
-    .role-badge.admin    { background:#fff7ed; color:#c2410c; }
+    .role-badge.customer { background:rgba(0,71,60,0.08); color:#00473c; }
+    .role-badge.owner    { background:var(--color-sage-mist, #d8e5d6); color:#00473c; }
+    .role-badge.admin    { background:var(--color-warm-sand, #e8dcc6); color:#00473c; }
 
     /* ── Status badges ────────────────────────────── */
     .status-badge {
@@ -100,137 +100,137 @@
         border-radius:99px; white-space:nowrap;
     }
     .status-badge::before { content:''; width:6px; height:6px; border-radius:50%; display:inline-block; }
-    .status-badge.active  { background:#f0fdf4; color:#15803d; }
-    .status-badge.active::before  { background:#22c55e; }
-    .status-badge.banned  { background:#fef2f2; color:#dc2626; }
-    .status-badge.banned::before  { background:#ef4444; }
+    .status-badge.active  { background:rgba(0,71,60,0.1); color:#00473c; }
+    .status-badge.active::before  { background:#00473c; }
+    .status-badge.banned  { background:rgba(192,57,43,0.1); color:#c0392b; }
+    .status-badge.banned::before  { background:#c0392b; }
 
     /* ── Action buttons ───────────────────────────── */
     .btn-action {
-        font-size:.75rem; font-weight:600; padding:4px 10px; border-radius:7px;
-        border:1px solid #e5e7eb; background:#fff; color:#374151;
+        font-size:.75rem; font-weight:600; padding:5px 12px; border-radius:99px;
+        border:1.5px solid rgba(140,140,130,0.4); background:transparent; color:#555;
         text-decoration:none; transition:border-color .15s, color .15s;
         display:inline-flex; align-items:center; gap:4px;
         white-space:nowrap; cursor:pointer;
     }
-    .btn-action:hover { border-color:#f97316; color:#f97316; }
+    .btn-action:hover { border-color:#00473c; color:#00473c; }
 
     .btn-ban {
-        font-size:.75rem; font-weight:600; padding:4px 10px; border-radius:7px;
-        border:1px solid #fca5a5; background:#fef2f2; color:#dc2626;
+        font-size:.75rem; font-weight:600; padding:5px 12px; border-radius:99px;
+        border:1.5px solid rgba(192,57,43,0.4); background:transparent; color:#c0392b;
         text-decoration:none; transition:background .15s;
         display:inline-flex; align-items:center; gap:4px; white-space:nowrap; cursor:pointer;
     }
-    .btn-ban:hover { background:#fee2e2; }
+    .btn-ban:hover { background:rgba(192,57,43,0.1); }
 
     .btn-unban {
-        font-size:.75rem; font-weight:600; padding:4px 10px; border-radius:7px;
-        border:1px solid #86efac; background:#f0fdf4; color:#16a34a;
+        font-size:.75rem; font-weight:600; padding:5px 12px; border-radius:99px;
+        border:1.5px solid rgba(0,71,60,0.3); background:transparent; color:#00473c;
         text-decoration:none; transition:background .15s;
         display:inline-flex; align-items:center; gap:4px; white-space:nowrap; cursor:pointer;
     }
-    .btn-unban:hover { background:#dcfce7; }
+    .btn-unban:hover { background:rgba(0,71,60,0.1); }
 
     .btn-promote {
-        font-size:.75rem; font-weight:600; padding:4px 10px; border-radius:7px;
-        border:1px solid #a5b4fc; background:#eef2ff; color:#4338ca;
+        font-size:.75rem; font-weight:600; padding:5px 12px; border-radius:99px;
+        border:1.5px solid rgba(0,71,60,0.3); background:transparent; color:#00473c;
         text-decoration:none; transition:background .15s;
         display:inline-flex; align-items:center; gap:4px; white-space:nowrap; cursor:pointer;
     }
-    .btn-promote:hover { background:#e0e7ff; }
+    .btn-promote:hover { background:rgba(0,71,60,0.1); }
 
     /* ── Filter bar ───────────────────────────────── */
     .filter-bar { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
     .filter-bar .form-control,
     .filter-bar .form-select {
-        font-size:.82rem; border-radius:9px; border:1px solid #e5e7eb;
-        padding:.42rem .85rem; background:#f9fafb;
+        font-size:.82rem; border-radius:99px; border:1.5px solid rgba(140,140,130,0.4);
+        padding:.42rem 1rem; background:#fff; color:#0e150e;
     }
     .filter-bar .form-control:focus,
-    .filter-bar .form-select:focus { border-color:#f97316; box-shadow:0 0 0 3px rgba(249,115,22,.08); }
+    .filter-bar .form-select:focus { border-color:#00473c; box-shadow:0 0 0 3px rgba(0,71,60,0.1); }
     .filter-bar .btn-search {
-        font-size:.82rem; font-weight:600; padding:.42rem 1rem;
-        border-radius:9px; background:#f97316; color:#fff; border:none; cursor:pointer;
+        font-size:.82rem; font-weight:700; padding:.42rem 1.25rem;
+        border-radius:99px; background:#00473c; color:#fff; border:none; cursor:pointer;
     }
-    .filter-bar .btn-search:hover { background:#ea580c; }
+    .filter-bar .btn-search:hover { background:#0e150e; }
 
     /* ── Role filter tabs ─────────────────────────── */
     .role-tabs { display:flex; gap:.4rem; flex-wrap:wrap; }
     .role-tab {
-        font-size:.78rem; font-weight:600; padding:5px 14px;
-        border-radius:99px; border:1px solid #e5e7eb;
-        background:#fff; color:#6b7280; text-decoration:none;
+        font-size:.78rem; font-weight:700; padding:6px 16px;
+        border-radius:99px; border:1.5px solid rgba(140,140,130,0.4);
+        background:transparent; color:#555; text-decoration:none;
         transition:all .15s; white-space:nowrap;
     }
-    .role-tab:hover { border-color:#f97316; color:#f97316; }
-    .role-tab.active { background:#f97316; color:#fff; border-color:#f97316; }
+    .role-tab:hover { border-color:#00473c; color:#00473c; }
+    .role-tab.active { background:#00473c; color:#fff; border-color:#00473c; }
 
     /* ── Empty state ──────────────────────────────── */
     .empty-state { text-align:center; padding:3.5rem 1rem; }
-    .empty-state i { font-size:2.8rem; color:#e5e7eb; display:block; margin-bottom:1rem; }
-    .empty-state p { font-size:.85rem; font-weight:600; color:#9ca3af; margin:0; }
+    .empty-state i { font-size:2.8rem; color:#8c8c82; display:block; margin-bottom:1rem; }
+    .empty-state p { font-size:.85rem; font-weight:600; color:#8c8c82; margin:0; }
 
     /* ── Offcanvas user detail ─────────────────────── */
-    .offcanvas { font-family:'Outfit',sans-serif; }
-    .offcanvas-header { border-bottom:1px solid #f3f4f6; padding:1.1rem 1.4rem; }
-    .offcanvas-title  { font-size:1rem; font-weight:800; color:#111827; }
+    .offcanvas { font-family:var(--font-body, 'Outfit', sans-serif); }
+    .offcanvas-header { border-bottom:1px solid rgba(140,140,130,0.15); padding:1.1rem 1.4rem; }
+    .offcanvas-title  { font-size:1rem; font-weight:800; color:#0e150e; }
     .offcanvas-body   { padding:1.25rem 1.4rem; }
 
     .detail-section-title {
         font-size:.68rem; font-weight:800; letter-spacing:.8px;
-        text-transform:uppercase; color:#9ca3af; margin-bottom:.5rem;
+        text-transform:uppercase; color:#8c8c82; margin-bottom:.5rem;
     }
     .detail-info-row {
         display:flex; justify-content:space-between; align-items:center;
-        padding:.45rem 0; border-bottom:1px solid #f9fafb; font-size:.83rem;
+        padding:.45rem 0; border-bottom:1px solid rgba(140,140,130,0.12); font-size:.83rem;
     }
     .detail-info-row:last-child { border-bottom:none; }
-    .detail-info-row .key { color:#6b7280; font-weight:500; }
-    .detail-info-row .val { font-weight:700; color:#111827; }
+    .detail-info-row .key { color:#555; font-weight:500; }
+    .detail-info-row .val { font-weight:700; color:#0e150e; }
 
     /* Stat boxes inside offcanvas */
     .user-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin:.75rem 0; }
     .user-stat-box {
-        background:#f9fafb; border:1px solid #f3f4f6; border-radius:10px;
+        background:var(--color-cream-canvas, #f4f3e7); border:1px solid rgba(140,140,130,0.2); border-radius:12px;
         padding:.75rem; text-align:center;
     }
-    .user-stat-box .val { font-size:1.25rem; font-weight:800; color:#111827; }
-    .user-stat-box .lbl { font-size:.68rem; color:#9ca3af; font-weight:600; text-transform:uppercase; }
+    .user-stat-box .val { font-size:1.25rem; font-weight:800; color:#00473c; }
+    .user-stat-box .lbl { font-size:.68rem; color:#8c8c82; font-weight:600; text-transform:uppercase; }
 
     /* Promote role form inside offcanvas */
     .form-label-sm {
-        font-size:.72rem; font-weight:700; color:#6b7280;
+        font-size:.72rem; font-weight:700; color:#8c8c82;
         text-transform:uppercase; letter-spacing:.4px;
     }
     .form-select-sm-custom {
-        font-size:.82rem; border-radius:10px; border:1px solid #e5e7eb;
-        padding:.5rem .85rem; width:100%;
+        font-size:.82rem; border-radius:99px; border:1.5px solid rgba(140,140,130,0.4);
+        padding:.5rem 1rem; width:100%;
     }
-    .form-select-sm-custom:focus { border-color:#f97316; box-shadow:0 0 0 3px rgba(249,115,22,.1); outline:none; }
+    .form-select-sm-custom:focus { border-color:#00473c; box-shadow:0 0 0 3px rgba(0,71,60,0.1); outline:none; }
 
     .btn-save-role {
         font-size:.82rem; font-weight:700; padding:.5rem 1.2rem;
-        border-radius:10px; background:#4338ca; color:#fff;
+        border-radius:99px; background:#00473c; color:#fff;
         border:none; cursor:pointer; transition:background .15s; width:100%; margin-top:.4rem;
     }
-    .btn-save-role:hover { background:#3730a3; }
+    .btn-save-role:hover { background:#0e150e; }
 
     .btn-panel-ban {
         font-size:.82rem; font-weight:700; padding:.5rem 1.2rem;
-        border-radius:10px; background:#fef2f2; color:#dc2626;
-        border:1px solid #fca5a5; cursor:pointer; transition:background .15s; width:100%; margin-top:.4rem;
+        border-radius:99px; background:transparent; color:#c0392b;
+        border:1.5px solid rgba(192,57,43,0.4); cursor:pointer; transition:background .15s; width:100%; margin-top:.4rem;
     }
-    .btn-panel-ban:hover { background:#fee2e2; }
+    .btn-panel-ban:hover { background:rgba(192,57,43,0.1); }
 
     .btn-panel-unban {
         font-size:.82rem; font-weight:700; padding:.5rem 1.2rem;
-        border-radius:10px; background:#f0fdf4; color:#16a34a;
-        border:1px solid #86efac; cursor:pointer; transition:background .15s; width:100%; margin-top:.4rem;
+        border-radius:99px; background:transparent; color:#00473c;
+        border:1.5px solid rgba(0,71,60,0.3); cursor:pointer; transition:background .15s; width:100%; margin-top:.4rem;
     }
-    .btn-panel-unban:hover { background:#dcfce7; }
+    .btn-panel-unban:hover { background:rgba(0,71,60,0.1); }
 
     /* Banned row tint */
-    .manage-table tbody tr.row-banned td { opacity:.65; background:#fef9f9; }
+    .manage-table tbody tr.row-banned td { opacity:.65; background:rgba(192,57,43,0.03) !important; }
 </style>
 
 <%-- ══════════════════════ PAGE HEADER ══════════════════════ --%>
@@ -364,7 +364,7 @@
                     <tbody>
                         <c:forEach items="${users}" var="user" varStatus="loop">
                             <tr id="user-row-${user.id}"
-                                class="${user.isBanned ? 'row-banned' : ''}">
+                                class="${user.banned ? 'row-banned' : ''}">
 
                                 <%-- Row number --%>
                                 <td style="color:#9ca3af;font-size:.76rem;">${loop.index + 1}</td>
@@ -372,11 +372,11 @@
                                 <%-- User chip --%>
                                 <td>
                                     <div class="user-chip">
-                                        <div class="user-avatar ${user.isBanned ? 'banned' : (user.role == 'SUPER_ADMIN' ? 'admin' : (user.role == 'RESTAURANT_OWNER' ? 'owner' : 'customer'))}">
-                                            ${not empty user.fullName ? user.fullName.substring(0,1).toUpperCase() : 'U'}
+                                        <div class="user-avatar ${user.banned ? 'banned' : (user.role == 'SUPER_ADMIN' ? 'admin' : (user.role == 'RESTAURANT_OWNER' ? 'owner' : 'customer'))}">
+                                            ${not empty user.name ? user.name.substring(0,1).toUpperCase() : 'U'}
                                         </div>
                                         <div>
-                                            <div class="user-name">${user.fullName}</div>
+                                            <div class="user-name">${user.name}</div>
                                             <div class="user-email">${user.email}</div>
                                         </div>
                                     </div>
@@ -432,7 +432,7 @@
                                 <%-- Status --%>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${user.isBanned}">
+                                        <c:when test="${user.banned}">
                                             <span class="status-badge banned">Banned</span>
                                         </c:when>
                                         <c:otherwise>
@@ -450,14 +450,14 @@
                                                 id="btn-view-user-${user.id}"
                                                 onclick="openUserDetail(
                                                     '${user.id}',
-                                                    '${user.fullName}',
+                                                    '${user.name}',
                                                     '${user.email}',
                                                     '${user.phone}',
                                                     '${user.role}',
                                                     '${user.registeredDate}',
                                                     '${user.totalOrders}',
                                                     '${user.totalSpend}',
-                                                    '${user.isBanned}',
+                                                    '${user.banned}',
                                                     '${user.restaurantName}'
                                                 )"
                                                 data-bs-toggle="offcanvas"
@@ -468,7 +468,7 @@
                                         <%-- Ban / Unban — only for non-admin users --%>
                                         <c:if test="${user.role != 'SUPER_ADMIN'}">
                                             <c:choose>
-                                                <c:when test="${user.isBanned}">
+                                                <c:when test="${user.banned}">
                                                     <form action="${pageContext.request.contextPath}/manage/users/unban"
                                                           method="POST" style="margin:0;" id="form-unban-${user.id}">
                                                         <input type="hidden" name="userId" value="${user.id}">
@@ -482,7 +482,7 @@
                                                           method="POST" style="margin:0;" id="form-ban-${user.id}">
                                                         <input type="hidden" name="userId" value="${user.id}">
                                                         <button type="submit" class="btn-ban" id="btn-ban-${user.id}"
-                                                                onclick="return confirm('Ban ${user.fullName}? They will no longer be able to log in.')">
+                                                                onclick="return confirm('Ban ${user.name}? They will no longer be able to log in.')">
                                                             <i class="bi bi-slash-circle"></i> Ban
                                                         </button>
                                                     </form>

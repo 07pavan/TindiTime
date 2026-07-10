@@ -10,13 +10,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | HungryGO Food Delivery</title>
+    <title>Checkout | TindiTime Food Delivery</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-checkout">
 
@@ -50,15 +50,15 @@
             <div class="col-lg-8">
                 <!-- 1. Delivery Address Card -->
                 <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" id="checkout-address-card">
-                    <h5 class="fw-bold text-dark mb-4 font-display"><i class="bi bi-geo-alt-fill text-orange me-2"></i> 1. Delivery Address</h5>
+                    <h5 class="fw-bold text-dark mb-4 font-display"><i class="bi bi-geo-alt-fill me-2" style="color: var(--color-deep-forest) !important;"></i> 1. Delivery Address</h5>
                     
                     <div class="row g-3 mb-4" id="address-selection">
                         <!-- Option Home -->
                         <div class="col-md-6">
                             <div class="card border border-2 border-orange bg-orange-subtle h-100 p-3 rounded-3 address-box cursor-pointer" onclick="selectAddress('home', 'home-full-address')">
                                 <div class="d-flex justify-content-between">
-                                    <h6 class="fw-bold mb-1"><i class="bi bi-house-door-fill text-orange me-1"></i> Home</h6>
-                                    <i class="bi bi-check-circle-fill text-orange fs-5" id="adr-icon-home"></i>
+                                    <h6 class="fw-bold mb-1"><i class="bi bi-house-door-fill me-1" style="color: var(--color-deep-forest) !important;"></i> Home</h6>
+                                    <i class="bi bi-check-circle-fill text-dark fs-5" id="adr-icon-home"></i>
                                 </div>
                                 <p class="small text-muted mb-0 mt-2" id="home-full-address">
                                     <c:choose>
@@ -96,7 +96,7 @@
 
                 <!-- 2. Choose Payment Method -->
                 <div class="card border-0 shadow-sm rounded-4 p-4" id="checkout-payment-card">
-                    <h5 class="fw-bold text-dark mb-4 font-display"><i class="bi bi-credit-card-fill text-orange me-2"></i> 2. Select Payment Mode</h5>
+                    <h5 class="fw-bold text-dark mb-4 font-display"><i class="bi bi-credit-card-fill me-2" style="color: var(--color-deep-forest) !important;"></i> 2. Select Payment Mode</h5>
                     
                     <div class="d-flex flex-column gap-3" id="payment-options-list">
                         <!-- UPI Radio Option -->
@@ -177,12 +177,12 @@
                         <hr class="my-1 border-dotted">
                         <div class="d-flex justify-content-between align-items-center mt-1">
                             <span class="fw-bold text-dark fs-6">Payable Total:</span>
-                            <span class="fw-bold text-orange font-mono fs-5" id="sum-grand-total">₹<c:out value="${gtotal}" /></span>
+                            <span class="fw-bold font-mono fs-5" id="sum-grand-total" style="color: var(--color-deep-forest) !important;">₹<c:out value="${gtotal}" /></span>
                         </div>
                     </div>
 
                     <!-- Checkout button -->
-                    <button class="btn btn-orange w-full py-3 fs-5 rounded-4 fw-bold shadow-md hover-up" onclick="placeOrder()">
+                    <button class="btn btn-forest-primary w-100 py-3 fs-5 shadow-sm hover-up" onclick="placeOrder()">
                         Place Order <i class="bi bi-wallet2 ms-1"></i>
                     </button>
                     <form id="real-checkout-form" action="${pageContext.request.contextPath}/checkout" method="POST" style="display:none;">
@@ -224,12 +224,12 @@
             if (type === 'home') {
                 homeCard.classList.add('border-orange', 'bg-orange-subtle');
                 workCard.classList.remove('border-orange', 'bg-orange-subtle');
-                homeIcon.className = "bi bi-check-circle-fill text-orange fs-5";
+                homeIcon.className = "bi bi-check-circle-fill text-dark fs-5";
                 workIcon.className = "bi bi-circle text-muted fs-5";
             } else {
                 workCard.classList.add('border-orange', 'bg-orange-subtle');
                 homeCard.classList.remove('border-orange', 'bg-orange-subtle');
-                workIcon.className = "bi bi-check-circle-fill text-orange fs-5";
+                workIcon.className = "bi bi-check-circle-fill text-dark fs-5";
                 homeIcon.className = "bi bi-circle text-muted fs-5";
             }
         }

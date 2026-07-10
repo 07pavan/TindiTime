@@ -10,13 +10,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Placed Successfully | HungryGO</title>
+    <title>Order Placed Successfully | TindiTime</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-success">
 
@@ -54,12 +54,11 @@
                         </div>
                     </div>
 
-                    <!-- Actions navigation CTAs -->
                     <div class="d-grid gap-2" id="success-action-ctas">
-                        <a href="${pageContext.request.contextPath}/orders" class="btn btn-orange py-3 rounded-3 fw-bold fs-6 text-decoration-none shadow-sm hover-up">
+                        <a href="${pageContext.request.contextPath}/orders" class="btn btn-forest-primary py-3 fs-6 shadow-sm hover-up">
                             Track Order & Status <i class="bi bi-geo-alt ms-1"></i>
                         </a>
-                        <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-outline-orange py-2.5 rounded-3 fw-bold fs-7 text-decoration-none">
+                        <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-outline-orange py-2.5 rounded-pill fw-bold fs-7 text-decoration-none">
                             Contine Food Hunt <i class="bi bi-chevron-right ms-1"></i>
                         </a>
                     </div>

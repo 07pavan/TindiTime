@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c"   uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn"  uri="jakarta.tags.functions" %>
 <%--
     MODULE 2 : RESTAURANT MANAGEMENT  (SUPER_ADMIN only)
     MVC: populated by AdminRestaurantServlet which sets:
@@ -22,23 +23,23 @@
 <style>
     /* ── Page header ─────────────────────────────────── */
     .page-section-title {
-        font-size: 1rem; font-weight: 700; color: #111827; margin: 0;
+        font-size: 1rem; font-weight: 700; color: #0e150e; margin: 0;
     }
     .page-section-sub {
-        font-size: .78rem; color: #9ca3af; margin-top: .15rem;
+        font-size: .78rem; color: #8c8c82; margin-top: .15rem;
     }
 
     /* ── Approval banner ──────────────────────────────── */
     .approval-banner {
-        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-        border: 1px solid #fed7aa;
-        border-radius: 14px;
+        background: var(--color-warm-sand, #e8dcc6);
+        border: 1px solid rgba(0,71,60,0.15);
+        border-radius: 20px;
         padding: 1.25rem 1.5rem;
     }
     .approval-banner-icon {
         width: 44px; height: 44px;
-        background: #f97316;
-        border-radius: 11px;
+        background: var(--color-deep-forest, #00473c);
+        border-radius: 12px;
         display: flex; align-items: center; justify-content: center;
         color: #fff; font-size: 1.2rem;
         flex-shrink: 0;
@@ -47,54 +48,54 @@
     /* ── Section card (re-use from dashboard) ─────────── */
     .section-card {
         background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
+        border: 1px solid rgba(140,140,130,0.2);
+        border-radius: 20px;
         overflow: hidden;
     }
     .section-card-header {
         padding: 1rem 1.25rem;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid rgba(140,140,130,0.15);
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
         flex-wrap: wrap;
     }
-    .section-card-title { font-size: .92rem; font-weight: 700; color: #111827; margin: 0; }
+    .section-card-title { font-size: .92rem; font-weight: 700; color: #0e150e; margin: 0; }
 
     /* ── Manage table ─────────────────────────────────── */
     .manage-table { font-size: .84rem; margin: 0; }
     .manage-table thead th {
-        background: #f9fafb;
+        background: rgba(0,71,60,0.04);
         font-size: .68rem; font-weight: 700;
         letter-spacing: .6px; text-transform: uppercase;
-        color: #9ca3af;
-        border-bottom: 1px solid #f3f4f6;
+        color: #8c8c82;
+        border-bottom: 1px solid rgba(140,140,130,0.18);
         padding: .7rem 1.1rem;
         white-space: nowrap;
     }
     .manage-table tbody td {
         padding: .9rem 1.1rem;
-        color: #374151;
+        color: #0e150e;
         vertical-align: middle;
-        border-bottom: 1px solid #f9fafb;
+        border-bottom: 1px solid rgba(140,140,130,0.12);
     }
     .manage-table tbody tr:last-child td { border-bottom: none; }
-    .manage-table tbody tr:hover td { background: #fafafa; }
+    .manage-table tbody tr:hover td { background: rgba(0,71,60,0.03); }
 
     /* ── Restaurant avatar ────────────────────────────── */
     .rest-chip { display: flex; align-items: center; gap: .65rem; }
     .rest-avatar {
         width: 38px; height: 38px;
-        border-radius: 10px;
-        background: linear-gradient(135deg, #f97316, #ea580c);
-        color: #fff;
+        border-radius: 12px;
+        background: var(--color-deep-forest, #00473c);
+        color: var(--color-lime-glow, #e6ff55);
         font-size: .82rem; font-weight: 800;
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
     }
-    .rest-name  { font-weight: 700; color: #111827; font-size: .85rem; }
-    .rest-city  { font-size: .72rem; color: #9ca3af; }
+    .rest-name  { font-weight: 700; color: #0e150e; font-size: .85rem; }
+    .rest-city  { font-size: .72rem; color: #8c8c82; }
 
     /* ── Status badges ────────────────────────────────── */
     .status-badge {
@@ -106,69 +107,69 @@
         content:''; width: 6px; height: 6px;
         border-radius: 50%; display: inline-block;
     }
-    .status-badge.active   { background:#f0fdf4; color:#15803d; }
-    .status-badge.active::before   { background:#22c55e; }
-    .status-badge.pending  { background:#fff7ed; color:#c2410c; }
-    .status-badge.pending::before  { background:#f97316; }
-    .status-badge.suspended{ background:#fef2f2; color:#dc2626; }
-    .status-badge.suspended::before{ background:#ef4444; }
+    .status-badge.active   { background:rgba(0,71,60,0.1); color:#00473c; }
+    .status-badge.active::before   { background:#00473c; }
+    .status-badge.pending  { background:rgba(230,255,85,0.25); color:#5c6a00; }
+    .status-badge.pending::before  { background:#a8b400; }
+    .status-badge.suspended{ background:rgba(192,57,43,0.1); color:#c0392b; }
+    .status-badge.suspended::before{ background:#c0392b; }
 
     /* ── Star rating ──────────────────────────────────── */
     .star-rating { color: #fbbf24; font-size: .8rem; }
-    .star-rating span { color: #374151; font-size: .78rem; font-weight: 600; margin-left: 3px; }
+    .star-rating span { color: #0e150e; font-size: .78rem; font-weight: 600; margin-left: 3px; }
 
     /* ── Action buttons ───────────────────────────────── */
     .btn-approve {
         font-size: .75rem; font-weight: 700;
-        padding: 5px 12px; border-radius: 8px; border: none;
-        background: #22c55e; color: #fff;
+        padding: 6px 14px; border-radius: 99px; border: none;
+        background: var(--color-deep-forest, #00473c); color: #fff;
         cursor: pointer; transition: background .15s;
         text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
     }
-    .btn-approve:hover { background: #16a34a; color: #fff; }
+    .btn-approve:hover { background: #0e150e; color: #fff; }
 
     .btn-reject {
         font-size: .75rem; font-weight: 700;
-        padding: 5px 12px; border-radius: 8px;
-        border: 1px solid #fca5a5;
-        background: #fef2f2; color: #dc2626;
+        padding: 5px 12px; border-radius: 99px;
+        border: 1.5px solid rgba(192,57,43,0.4);
+        background: transparent; color: #c0392b;
         cursor: pointer; transition: background .15s, border-color .15s;
         text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
     }
-    .btn-reject:hover { background: #fee2e2; border-color: #ef4444; }
+    .btn-reject:hover { background: rgba(192,57,43,0.1); border-color: #c0392b; }
 
     .btn-action {
         font-size: .75rem; font-weight: 600;
-        padding: 4px 10px; border-radius: 7px;
-        border: 1px solid #e5e7eb;
-        background: #fff; color: #374151;
+        padding: 5px 12px; border-radius: 99px;
+        border: 1.5px solid rgba(140,140,130,0.4);
+        background: transparent; color: #555;
         text-decoration: none; transition: border-color .15s, color .15s;
         display: inline-flex; align-items: center; gap: 4px;
         white-space: nowrap;
     }
-    .btn-action:hover { border-color: #f97316; color: #f97316; }
+    .btn-action:hover { border-color: #00473c; color: #00473c; }
 
     .btn-suspend {
         font-size: .75rem; font-weight: 600;
-        padding: 4px 10px; border-radius: 7px;
-        border: 1px solid #fca5a5;
-        background: #fef2f2; color: #dc2626;
+        padding: 5px 12px; border-radius: 99px;
+        border: 1.5px solid rgba(192,57,43,0.4);
+        background: transparent; color: #c0392b;
         text-decoration: none; transition: background .15s;
         display: inline-flex; align-items: center; gap: 4px;
         white-space: nowrap;
     }
-    .btn-suspend:hover { background: #fee2e2; }
+    .btn-suspend:hover { background: rgba(192,57,43,0.1); }
 
     .btn-activate {
         font-size: .75rem; font-weight: 600;
-        padding: 4px 10px; border-radius: 7px;
-        border: 1px solid #86efac;
-        background: #f0fdf4; color: #16a34a;
+        padding: 5px 12px; border-radius: 99px;
+        border: 1.5px solid rgba(0,71,60,0.3);
+        background: transparent; color: #00473c;
         text-decoration: none; transition: background .15s;
         display: inline-flex; align-items: center; gap: 4px;
         white-space: nowrap;
     }
-    .btn-activate:hover { background: #dcfce7; }
+    .btn-activate:hover { background: rgba(0,71,60,0.1); }
 
     /* ── Search & filter bar ──────────────────────────── */
     .filter-bar {
@@ -177,53 +178,54 @@
     }
     .filter-bar .form-control,
     .filter-bar .form-select {
-        font-size: .82rem; border-radius: 9px;
-        border: 1px solid #e5e7eb;
-        padding: .42rem .85rem;
-        background: #f9fafb;
+        font-size: .82rem; border-radius: 99px;
+        border: 1.5px solid rgba(140,140,130,0.4);
+        padding: .42rem 1rem;
+        background: #fff;
+        color: #0e150e;
     }
     .filter-bar .form-control:focus,
     .filter-bar .form-select:focus {
-        border-color: #f97316;
-        box-shadow: 0 0 0 3px rgba(249,115,22,.08);
+        border-color: #00473c;
+        box-shadow: 0 0 0 3px rgba(0,71,60,0.1);
     }
     .filter-bar .btn-search {
-        font-size: .82rem; font-weight: 600;
-        padding: .42rem 1rem; border-radius: 9px;
-        background: #f97316; color: #fff; border: none;
+        font-size: .82rem; font-weight: 700;
+        padding: .42rem 1.25rem; border-radius: 99px;
+        background: #00473c; color: #fff; border: none;
         cursor: pointer; transition: background .15s;
     }
-    .filter-bar .btn-search:hover { background: #ea580c; }
+    .filter-bar .btn-search:hover { background: #0e150e; }
 
     /* ── Filter tabs ──────────────────────────────────── */
     .filter-tabs { display: flex; gap: .4rem; flex-wrap: wrap; }
     .filter-tab {
-        font-size: .78rem; font-weight: 600;
-        padding: 5px 14px; border-radius: 99px;
-        border: 1px solid #e5e7eb;
-        background: #fff; color: #6b7280;
+        font-size: .78rem; font-weight: 700;
+        padding: 6px 16px; border-radius: 99px;
+        border: 1.5px solid rgba(140,140,130,0.4);
+        background: transparent; color: #555;
         text-decoration: none; transition: all .15s;
         white-space: nowrap;
     }
-    .filter-tab:hover { border-color: #f97316; color: #f97316; }
+    .filter-tab:hover { border-color: #00473c; color: #00473c; }
     .filter-tab.active {
-        background: #f97316; color: #fff;
-        border-color: #f97316;
+        background: #00473c; color: #fff;
+        border-color: #00473c;
     }
 
     /* ── Empty state ──────────────────────────────────── */
     .empty-state {
         text-align: center; padding: 3rem 1rem;
     }
-    .empty-state i { font-size: 2.8rem; color: #e5e7eb; display: block; margin-bottom: 1rem; }
-    .empty-state p { font-size: .85rem; font-weight: 600; color: #9ca3af; margin: 0; }
+    .empty-state i { font-size: 2.8rem; color: #8c8c82; display: block; margin-bottom: 1rem; }
+    .empty-state p { font-size: .85rem; font-weight: 600; color: #8c8c82; margin: 0; }
 
     /* ── Cuisine chip ─────────────────────────────────── */
     .cuisine-chip {
         display: inline-block;
-        font-size: .68rem; font-weight: 600;
-        padding: 2px 8px; border-radius: 6px;
-        background: #f3f4f6; color: #374151;
+        font-size: .68rem; font-weight: 700;
+        padding: 2px 10px; border-radius: 99px;
+        background: var(--color-warm-sand, #e8dcc6); color: var(--color-deep-forest, #00473c);
     }
 </style>
 
@@ -246,6 +248,15 @@
                 <i class="bi bi-exclamation-circle-fill" style="font-size:.75rem;"></i>
                 ${pendingRestaurants.size()} Pending
             </span>
+        </c:if>
+        <c:if test="${sessionScope.userRole == 'SUPER_ADMIN'}">
+            <button class="btn btn-sm" id="btn-add-restaurant"
+                    onclick="document.getElementById('addRestaurantModal').style.display='flex'"
+                    style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;
+                           border-radius:10px;padding:.45rem 1rem;font-size:.8rem;font-weight:700;
+                           display:flex;align-items:center;gap:.4rem;cursor:pointer;">
+                <i class="bi bi-plus-lg"></i> Add Restaurant
+            </button>
         </c:if>
     </div>
 </div>
@@ -493,6 +504,40 @@
                                                 </form>
                                             </c:otherwise>
                                         </c:choose>
+
+                                        <%-- Edit button --%>
+                                        <c:if test="${sessionScope.userRole == 'SUPER_ADMIN'}">
+                                            <button type="button"
+                                                    id="btn-edit-${rest.id}"
+                                                    onclick="openEditModal(
+                                                        '${rest.id}',
+                                                        '${fn:escapeXml(rest.name)}',
+                                                        '${fn:escapeXml(rest.cuisineType)}',
+                                                        '${fn:escapeXml(rest.city)}',
+                                                        '${fn:escapeXml(rest.address)}',
+                                                        '${fn:escapeXml(rest.phone)}',
+                                                        '${fn:escapeXml(rest.email)}',
+                                                        '${rest.deliveryTimeMins}',
+                                                        '${rest.costForTwo}',
+                                                        '${fn:escapeXml(rest.imageUrl)}',
+                                                        '${fn:escapeXml(rest.description)}'
+                                                    )"
+                                                    style="display:inline-flex;align-items:center;gap:.3rem;
+                                                           padding:.3rem .7rem;border:1px solid #6366f1;
+                                                           border-radius:7px;background:#eef2ff;color:#4338ca;
+                                                           font-size:.75rem;font-weight:600;cursor:pointer;">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
+                                            <button type="button"
+                                                    id="btn-delete-${rest.id}"
+                                                    onclick="deleteRestaurant('${rest.id}', '${fn:escapeXml(rest.name)}')"
+                                                    style="display:inline-flex;align-items:center;gap:.3rem;
+                                                           padding:.3rem .7rem;border:1px solid #ef4444;
+                                                           border-radius:7px;background:#fef2f2;color:#dc2626;
+                                                           font-size:.75rem;font-weight:600;cursor:pointer;">
+                                                <i class="bi bi-trash3"></i> Delete
+                                            </button>
+                                        </c:if>
                                     </div>
                                 </td>
 
@@ -530,4 +575,232 @@
 
 </div><%-- /section-card --%>
 
+<%-- ═══════════════════════════════════ MODALS ══════════════════════════════════ --%>
+
+<%-- ── ADD RESTAURANT MODAL ──────────────────────────────────────────────────── --%>
+<div id="addRestaurantModal" style="display:none;position:fixed;inset:0;z-index:1060;
+     background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:620px;
+                max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+        <div style="padding:1.4rem 1.6rem;border-bottom:1px solid #f3f4f6;
+                    display:flex;align-items:center;justify-content:space-between;">
+            <h5 style="margin:0;font-weight:700;font-size:1rem;">Add New Restaurant</h5>
+            <button onclick="document.getElementById('addRestaurantModal').style.display='none'"
+                    style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">&times;</button>
+        </div>
+        <form method="POST" action="${pageContext.request.contextPath}/manage/restaurants/add"
+              id="form-add-restaurant" style="padding:1.6rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Restaurant Name *</label>
+                    <input type="text" name="name" required placeholder="e.g. The Burger Lab"
+                           id="add-rest-name"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Cuisine Type *</label>
+                    <input type="text" name="cuisineType" required placeholder="e.g. North Indian"
+                           id="add-rest-cuisine"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">City</label>
+                    <input type="text" name="city" placeholder="e.g. Bengaluru" id="add-rest-city"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Address</label>
+                    <input type="text" name="address" placeholder="Full street address" id="add-rest-address"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Phone</label>
+                    <input type="text" name="phone" placeholder="+91 98765 43210" id="add-rest-phone"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Email</label>
+                    <input type="email" name="email" placeholder="restaurant@example.com" id="add-rest-email"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Delivery Time (mins)</label>
+                    <input type="number" name="deliveryTimeMins" placeholder="30" min="5" max="120" id="add-rest-delivery"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Cost for Two (₹)</label>
+                    <input type="number" name="costForTwo" placeholder="500" min="0" id="add-rest-cost"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Image URL</label>
+                    <input type="url" name="imageUrl" placeholder="https://..." id="add-rest-image"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Description</label>
+                    <textarea name="description" rows="2" placeholder="Short description of the restaurant..."
+                              id="add-rest-desc"
+                              style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                     border-radius:8px;font-size:.85rem;margin-top:.3rem;
+                                     resize:vertical;box-sizing:border-box;"></textarea>
+                </div>
+            </div>
+            <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.4rem;">
+                <button type="button"
+                        onclick="document.getElementById('addRestaurantModal').style.display='none'"
+                        style="padding:.55rem 1.2rem;border:1px solid #d1d5db;border-radius:9px;
+                               background:#fff;font-size:.85rem;cursor:pointer;color:#374151;">
+                    Cancel
+                </button>
+                <button type="submit" id="btn-add-rest-submit"
+                        style="padding:.55rem 1.4rem;border:none;border-radius:9px;
+                               background:linear-gradient(135deg,#6366f1,#8b5cf6);
+                               color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;">
+                    <i class="bi bi-plus-lg me-1"></i>Add Restaurant
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%-- ── EDIT RESTAURANT MODAL ──────────────────────────────────────────────────── --%>
+<div id="editRestaurantModal" style="display:none;position:fixed;inset:0;z-index:1060;
+     background:rgba(0,0,0,.55);align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#fff;border-radius:18px;width:100%;max-width:620px;
+                max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);">
+        <div style="padding:1.4rem 1.6rem;border-bottom:1px solid #f3f4f6;
+                    display:flex;align-items:center;justify-content:space-between;">
+            <h5 style="margin:0;font-weight:700;font-size:1rem;">Edit Restaurant</h5>
+            <button onclick="document.getElementById('editRestaurantModal').style.display='none'"
+                    style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6b7280;">&times;</button>
+        </div>
+        <form method="POST" action="${pageContext.request.contextPath}/manage/restaurants/edit"
+              id="form-edit-restaurant" style="padding:1.6rem;">
+            <input type="hidden" name="restaurantId" id="edit-rest-id">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Restaurant Name *</label>
+                    <input type="text" name="name" required id="edit-rest-name"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Cuisine Type *</label>
+                    <input type="text" name="cuisineType" required id="edit-rest-cuisine"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">City</label>
+                    <input type="text" name="city" id="edit-rest-city"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Address</label>
+                    <input type="text" name="address" id="edit-rest-address"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Phone</label>
+                    <input type="text" name="phone" id="edit-rest-phone"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Email</label>
+                    <input type="email" name="email" id="edit-rest-email"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Delivery Time (mins)</label>
+                    <input type="number" name="deliveryTimeMins" min="5" max="120" id="edit-rest-delivery"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div>
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Cost for Two (₹)</label>
+                    <input type="number" name="costForTwo" min="0" id="edit-rest-cost"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Image URL</label>
+                    <input type="url" name="imageUrl" id="edit-rest-image"
+                           style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                  border-radius:8px;font-size:.85rem;margin-top:.3rem;box-sizing:border-box;">
+                </div>
+                <div style="grid-column:1/-1;">
+                    <label style="font-size:.8rem;font-weight:600;color:#374151;">Description</label>
+                    <textarea name="description" rows="2" id="edit-rest-desc"
+                              style="width:100%;padding:.55rem .8rem;border:1px solid #d1d5db;
+                                     border-radius:8px;font-size:.85rem;margin-top:.3rem;
+                                     resize:vertical;box-sizing:border-box;"></textarea>
+                </div>
+            </div>
+            <div style="display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.4rem;">
+                <button type="button"
+                        onclick="document.getElementById('editRestaurantModal').style.display='none'"
+                        style="padding:.55rem 1.2rem;border:1px solid #d1d5db;border-radius:9px;
+                               background:#fff;font-size:.85rem;cursor:pointer;color:#374151;">
+                    Cancel
+                </button>
+                <button type="submit" id="btn-edit-rest-submit"
+                        style="padding:.55rem 1.4rem;border:none;border-radius:9px;
+                               background:linear-gradient(135deg,#0ea5e9,#6366f1);
+                               color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;">
+                    <i class="bi bi-check-lg me-1"></i>Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%-- ── EDIT + DELETE trigger buttons wired via JS ─────────────────────────────── --%>
+<script>
+function openEditModal(id, name, cuisine, city, address, phone, email, delivery, cost, imageUrl, desc) {
+    document.getElementById('edit-rest-id').value      = id;
+    document.getElementById('edit-rest-name').value    = name;
+    document.getElementById('edit-rest-cuisine').value = cuisine;
+    document.getElementById('edit-rest-city').value    = city;
+    document.getElementById('edit-rest-address').value = address;
+    document.getElementById('edit-rest-phone').value   = phone;
+    document.getElementById('edit-rest-email').value   = email;
+    document.getElementById('edit-rest-delivery').value= delivery;
+    document.getElementById('edit-rest-cost').value    = cost;
+    document.getElementById('edit-rest-image').value   = imageUrl;
+    document.getElementById('edit-rest-desc').value    = desc;
+    document.getElementById('editRestaurantModal').style.display = 'flex';
+}
+function deleteRestaurant(id, name) {
+    if (!confirm('Delete "' + name + '"?\nThis will permanently remove the restaurant and cannot be undone.')) return;
+    var f = document.createElement('form');
+    f.method = 'POST';
+    f.action = '${pageContext.request.contextPath}/manage/restaurants/delete';
+    var inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = 'restaurantId'; inp.value = id;
+    f.appendChild(inp); document.body.appendChild(f); f.submit();
+}
+// Close modals on outside-click
+['addRestaurantModal','editRestaurantModal'].forEach(function(id) {
+    document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) this.style.display = 'none';
+    });
+});
+</script>
+
 <jsp:include page="manage-sidebar-close.jsp"/>
+

@@ -6,11 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Browse all top-rated restaurants on HungryGO and order food online.">
-    <title>All Restaurants | HungryGO Delivery</title>
+    <meta name="description" content="Browse all top-rated restaurants on TindiTime and order food online.">
+    <title>All Restaurants | TindiTime Delivery</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-restaurants">
 
@@ -88,10 +88,12 @@
                          data-title="${restaurant.name}">
                         <div class="card restaurant-card hover-up h-100 p-0 border">
                             <div class="restaurant-img-container">
-                                <c:if test="${restaurant.rating >= 4.5}">
-                                    <span class="badge bg-orange text-white position-absolute top-3 left-3 z-3 shadow-sm px-2 py-1 fs-8 fw-bold">PROMOTED</span>
-                                </c:if>
-                                <div class="discount-badge">Flat 20% Off</div>
+                                <div class="card-badge-list">
+                                    <c:if test="${restaurant.rating >= 4.5}">
+                                        <span class="card-badge-item promoted-badge-style">PROMOTED</span>
+                                    </c:if>
+                                    <span class="card-badge-item discount-badge-style">Flat 20% Off</span>
+                                </div>
                                 <img src="${restaurant.imageUrl}" alt="<c:out value='${restaurant.name}' />">
                             </div>
                             <div class="card-body p-3">
@@ -153,13 +155,13 @@
         function setFilter(filterType) {
             currentFilter = filterType;
             document.querySelectorAll('#filter-controls-group button').forEach(btn => {
-                btn.classList.remove('btn-orange', 'text-white', 'active-filter');
+                btn.classList.remove('btn-orange', 'active-filter');
                 btn.classList.add('btn-outline-secondary');
             });
             const activeBtn = document.getElementById('filter-' + filterType);
             if (activeBtn) {
                 activeBtn.classList.remove('btn-outline-secondary');
-                activeBtn.classList.add('btn-orange', 'text-white', 'active-filter');
+                activeBtn.classList.add('btn-orange', 'active-filter');
             }
             filterRestaurants();
         }

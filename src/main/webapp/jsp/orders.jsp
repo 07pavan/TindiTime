@@ -8,13 +8,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders | HungryGO Delivery Tracking</title>
+    <title>My Orders | TindiTime Delivery Tracking</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100 bg-light" id="body-orders">
 
@@ -27,7 +27,7 @@
             <div class="col-lg-3 d-none d-lg-block" id="orders-dashboard-sidebar">
                 <div class="card border-0 shadow-sm p-3 rounded-4" id="profile-links-card">
                     <div class="text-center p-3 border-bottom mb-3" id="profile-tiny-summary">
-                        <i class="bi bi-person-circle display-4 text-orange mb-2"></i>
+                        <i class="bi bi-person-circle display-4 mb-2" style="color: var(--color-deep-forest) !important;"></i>
                         <h6 class="fw-bold mb-0"><c:out value="${sessionScope.username}" /></h6>
                         <span class="fs-8 text-muted"><c:out value="${sessionScope.email}" /></span>
                     </div>
@@ -42,7 +42,7 @@
             <!-- Right Orders History Panel -->
             <div class="col-lg-9" id="orders-history-panel">
                 <div class="card border-0 shadow-sm rounded-4 p-4" id="orders-wrapper-card">
-                    <h4 class="fw-bold text-dark border-bottom pb-3 mb-4 font-display"><i class="bi bi-clock-history text-orange me-2"></i> My Order Journeys</h4>
+                    <h4 class="fw-bold text-dark border-bottom pb-3 mb-4 font-display"><i class="bi bi-clock-history me-2" style="color: var(--color-deep-forest) !important;"></i> My Order Journeys</h4>
                     
                     <div class="d-flex flex-column gap-4" id="placed-orders-list">
                         <c:forEach var="order" items="${orders}" varStatus="loop">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="col-sm-4 text-sm-end text-start">
                                         <span class="text-muted small d-block">Grand Total:</span>
-                                        <span class="fw-bold fs-4 text-orange font-mono">₹<fmt:formatNumber value="${order.totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2" /></span>
+                                        <span class="fw-bold fs-4 font-mono" style="color: var(--color-deep-forest) !important;">₹<fmt:formatNumber value="${order.totalAmount}" type="number" minFractionDigits="2" maxFractionDigits="2" /></span>
                                     </div>
                                 </div>
 
@@ -106,7 +106,7 @@
                                     </c:choose>
                                     
                                     <!-- Reorder button passes item list directly -->
-                                    <button class="btn btn-outline-orange btn-sm px-4 py-2 rounded-3 fw-bold text-uppercase" onclick="reorderItems('<c:out value="${itemJson}" />')">
+                                    <button class="btn btn-outline-orange btn-sm px-4 py-2 rounded-pill fw-bold text-uppercase" onclick="reorderItems('<c:out value="${itemJson}" />')">
                                         <i class="bi bi-arrow-repeat me-1"></i> Reorder Items
                                     </button>
                                 </div>
@@ -118,7 +118,7 @@
                                 <i class="bi bi-clock-history text-muted display-3 mb-3"></i>
                                 <h5>No Orders Tracked Yet</h5>
                                 <p class="text-muted text-truncate">We haven't recorded any order activity from you yet.</p>
-                                <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-orange px-4 py-2 mt-2 rounded-3 text-white fw-bold text-decoration-none">Order Dinner Now</a>
+                                <a href="${pageContext.request.contextPath}/restaurants" class="btn btn-orange px-4 py-2 mt-2 rounded-pill fw-bold text-decoration-none">Order Dinner Now</a>
                             </div>
                         </c:if>
                     </div>

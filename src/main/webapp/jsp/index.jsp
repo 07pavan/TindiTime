@@ -10,8 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="HungryGO - Order food online from top-rated restaurants near you. Fast delivery, great offers!">
-    <title>HungryGO | Online Food Ordering &amp; Delivery</title>
+    <meta name="description" content="TindiTime - Order food online from top-rated restaurants near you. Fast delivery, great offers!">
+    <title>TindiTime | Online Food Ordering &amp; Delivery</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -19,7 +19,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="${pageContext.request.contextPath}/jsp/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/jsp/style.css?v=2" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100" id="body-index">
 
@@ -36,7 +36,7 @@
                 <div class="col-lg-6" id="hero-left-content">
                     <span class="hero-badge"><i class="bi bi-gift-fill me-2"></i>50% Off on your first 3 orders!</span>
                     <h1 class="display-3 text-dark mb-3 tracking-tight">
-                        Hungry? Let's get <span class="text-orange">HungryGO</span> deliver it!
+                        Hungry? Let's get <span style="color: var(--color-deep-forest) !important; font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.5px;">Tindi<span style="color: var(--color-forest-shadow);">Time</span></span> deliver it!
                     </h1>
                     <p class="lead text-muted mb-4 fs-5">
                         Discover top-rated local restaurants. Order fresh meals with lightning-fast delivery straight to your door.
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <!-- All category links go through /restaurants?category=X Servlet -->
-            <div class="d-flex gap-4 overflow-auto pb-3 scrollbar-hidden" id="categories-container" style="scroll-behavior: smooth;">
+            <div class="d-flex justify-content-between gap-4 overflow-auto pb-3 scrollbar-hidden" id="categories-container" style="scroll-behavior: smooth;">
                 <a href="${pageContext.request.contextPath}/restaurants?category=Burger"       class="category-item text-decoration-none text-dark flex-shrink-0" id="cat-burger">
                     <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=150&q=80" alt="Burgers" class="category-img">
                     <div class="mt-2 fw-medium">Burger</div>
@@ -155,27 +155,27 @@
             <h2 class="mb-4 text-dark fs-2 font-display">Special Offers For You</h2>
             <div class="row g-4" id="index-offers-grid">
                 <div class="col-md-4" id="offer-card-1">
-                    <div class="card border-0 bg-orange text-white p-4 rounded-4 shadow-sm hover-up position-relative overflow-hidden" style="height: 160px;">
+                    <div class="card border-0 p-4 rounded-4 hover-up position-relative overflow-hidden" style="height: 160px; background-color: var(--color-lime-glow) !important; color: var(--color-forest-shadow) !important;">
                         <i class="bi bi-tag-fill position-absolute end-0 bottom-0 fs-1" style="transform: translate(10px,10px) rotate(-15deg); opacity:.15;"></i>
-                        <span class="badge bg-white text-orange fw-bold mb-2 align-self-start">FIRST_BITE</span>
-                        <h3 class="mb-1">Flat 50% Off</h3>
-                        <p class="small mb-0">Up to ₹800 off on your very first order.</p>
+                        <span class="badge fw-bold mb-2 align-self-start" style="background-color: var(--color-deep-forest); color: var(--color-lime-glow);">FIRST_BITE</span>
+                        <h3 class="mb-1 fw-bold">Flat 50% Off</h3>
+                        <p class="small mb-0 opacity-75">Up to ₹800 off on your very first order.</p>
                     </div>
                 </div>
                 <div class="col-md-4" id="offer-card-2">
-                    <div class="card border-0 bg-dark-custom text-white p-4 rounded-4 shadow-sm hover-up position-relative overflow-hidden" style="height: 160px;">
+                    <div class="card border-0 text-white p-4 rounded-4 hover-up position-relative overflow-hidden" style="height: 160px; background-color: var(--color-deep-forest) !important;">
                         <i class="bi bi-truck position-absolute end-0 bottom-0 fs-1" style="transform: translate(10px,10px) rotate(-15deg); opacity:.15;"></i>
-                        <span class="badge bg-orange text-white fw-bold mb-2 align-self-start">FREE_DELIVERY</span>
-                        <h3 class="mb-1">Free Delivery</h3>
-                        <p class="small mb-0">On orders above ₹1200 from partner outlets.</p>
+                        <span class="badge fw-bold mb-2 align-self-start" style="background-color: var(--color-lime-glow); color: var(--color-deep-forest);">FREE_DELIVERY</span>
+                        <h3 class="mb-1 fw-bold">Free Delivery</h3>
+                        <p class="small mb-0 opacity-75">On orders above ₹1200 from partner outlets.</p>
                     </div>
                 </div>
                 <div class="col-md-4" id="offer-card-3">
-                    <div class="card border-0 text-white p-4 rounded-4 shadow-sm hover-up position-relative overflow-hidden" style="background: linear-gradient(135deg, #0984e3 0%, #00cec9 100%); height: 160px;">
+                    <div class="card border-0 p-4 rounded-4 hover-up position-relative overflow-hidden" style="height: 160px; background-color: var(--color-warm-sand) !important; color: var(--color-deep-forest) !important; border: 1px solid rgba(0,71,60,0.15) !important;">
                         <i class="bi bi-wallet2 position-absolute end-0 bottom-0 fs-1" style="transform: translate(10px,10px) rotate(-15deg); opacity:.15;"></i>
-                        <span class="badge bg-white text-dark fw-bold mb-2 align-self-start">WEEKEND_FEAST</span>
-                        <h3 class="mb-1">Feast 30% Off</h3>
-                        <p class="small mb-0">Weekend specials with amazing discounts.</p>
+                        <span class="badge fw-bold mb-2 align-self-start" style="background-color: var(--color-deep-forest); color: #fff;">WEEKEND_FEAST</span>
+                        <h3 class="mb-1 fw-bold">Feast 30% Off</h3>
+                        <p class="small mb-0 opacity-75">Weekend specials with amazing discounts.</p>
                     </div>
                 </div>
             </div>
@@ -202,10 +202,12 @@
                     <div class="col-lg-3 col-md-6" id="rest-card-${restaurant.id}">
                         <div class="card restaurant-card hover-up h-100 p-0 border">
                             <div class="restaurant-img-container">
-                                <c:if test="${restaurant.rating >= 4.5}">
-                                    <span class="badge bg-orange text-white position-absolute top-3 left-3 z-3 shadow-sm px-2 py-1 fs-8 fw-bold">PROMOTED</span>
-                                </c:if>
-                                <div class="discount-badge">Flat 20% Off</div>
+                                <div class="card-badge-list">
+                                    <c:if test="${restaurant.rating >= 4.5}">
+                                        <span class="card-badge-item promoted-badge-style">PROMOTED</span>
+                                    </c:if>
+                                    <span class="card-badge-item discount-badge-style">Flat 20% Off</span>
+                                </div>
                                 <img src="${restaurant.imageUrl}" alt="<c:out value='${restaurant.name}' />">
                             </div>
                             <div class="card-body p-3">
