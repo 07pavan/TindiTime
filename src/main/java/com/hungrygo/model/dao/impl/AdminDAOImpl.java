@@ -41,10 +41,10 @@ public class AdminDAOImpl implements AdminDAO {
         "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE restaurant_id = ? AND order_status != 'CANCELLED'";
 
     private static final String SUM_REVENUE_TODAY =
-        "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE DATE(created_at) = CURDATE()";
+        "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE order_status != 'CANCELLED' AND DATE(created_at) = CURDATE()";
 
     private static final String SUM_REVENUE_TODAY_REST =
-        "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE restaurant_id = ? AND DATE(created_at) = CURDATE()";
+        "SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE restaurant_id = ? AND order_status != 'CANCELLED' AND DATE(created_at) = CURDATE()";
 
     private static final String COUNT_ACTIVE_RESTAURANTS =
         "SELECT COUNT(*) FROM restaurants WHERE is_active = 1";
@@ -75,6 +75,12 @@ public class AdminDAOImpl implements AdminDAO {
         "LEFT JOIN restaurants r ON o.restaurant_id = r.id " +
         "WHERE o.restaurant_id = ? " +
         "ORDER BY o.created_at DESC LIMIT ?";
+
+    private static final String COUNT_ACTIVE_ORDERS_ALL =
+        "SELECT COUNT(*) FROM orders WHERE order_status IN ('Placed', 'Confirmed', 'Preparing', 'Out for Delivery')";
+
+    private static final String COUNT_ACTIVE_ORDERS_REST =
+        "SELECT COUNT(*) FROM orders WHERE restaurant_id = ? AND order_status IN ('Placed', 'Confirmed', 'Preparing', 'Out for Delivery')";
 
     // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -219,5 +225,14 @@ public class AdminDAOImpl implements AdminDAO {
             DBConnection.closeResources(rs, ps, conn);
         }
         return list;
+    }
+
+    @Override
+    public long getActiveOrderCount(Integer restaurantId) {
+        if (restaurantId == null) {
+            return scalar(COUNT_ACTIVE_ORDERS_ALL);
+        } else {
+            return scalarInt(COUNT_ACTIVE_ORDERS_REST, restaurantId);
+        }
     }
 }

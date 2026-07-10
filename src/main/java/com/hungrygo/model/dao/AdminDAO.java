@@ -41,4 +41,7 @@ public interface AdminDAO {
      *   totalAmount, orderStatus, paymentMethod, createdAt (String formatted).
      */
     List<Map<String, Object>> getRecentOrders(Integer restaurantId, int limit);
+
+    /** Count of active orders (status in Placed, Confirmed, Preparing, Out for Delivery). */
+    long getActiveOrderCount(Integer restaurantId);
 }

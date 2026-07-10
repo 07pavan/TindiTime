@@ -67,6 +67,7 @@ public class AdminDashboardServlet extends HttpServlet {
         // Order counts
         stats.put("totalOrders",    adminDAO.getTotalOrders(restaurantId));
         stats.put("todayOrders",    adminDAO.getTodayOrderCount(restaurantId));
+        stats.put("activeOrders",   adminDAO.getActiveOrderCount(restaurantId));
 
         // Revenue figures
         BigDecimal totalRev = adminDAO.getTotalRevenue(restaurantId);
