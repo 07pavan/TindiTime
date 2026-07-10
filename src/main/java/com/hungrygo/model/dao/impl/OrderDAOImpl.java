@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class OrderDAOImpl implements OrderDAO {
 
-    private static final String INSERT_ORDER = "INSERT INTO orders (order_id, user_id, delivery_address, payment_method, payment_status, order_status, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_ORDER = "INSERT INTO orders (order_id, user_id, delivery_address, payment_method, payment_status, order_status, total_amount, restaurant_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String INSERT_ORDER_ITEM = "INSERT INTO order_items (order_id, menu_item_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?);";
     private static final String SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE id = ?;";
     private static final String SELECT_ORDER_BY_STRING_ID = "SELECT * FROM orders WHERE order_id = ?;";
@@ -31,7 +31,7 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders ORDER BY created_at DESC;";
     private static final String UPDATE_ORDER_STATUS = "UPDATE orders SET order_status = ? WHERE id = ?;";
     private static final String UPDATE_PAYMENT_STATUS = "UPDATE orders SET payment_status = ? WHERE id = ?;";
-    private static final String DELETE_ORDER = "DELETE FROM orders WHERE id = ?;";
+    private static final String DELETE_ORDER = "UPDATE orders SET order_status = 'Cancelled' WHERE id = ?;";
 
     @Override
     public boolean placeOrder(Order order) {
@@ -52,6 +52,11 @@ public class OrderDAOImpl implements OrderDAO {
             psOrder.setString(5, order.getPaymentStatus());
             psOrder.setString(6, order.getOrderStatus());
             psOrder.setBigDecimal(7, order.getTotalAmount());
+            if (order.getRestaurantId() > 0) {
+                psOrder.setInt(8, order.getRestaurantId());
+            } else {
+                psOrder.setNull(8, java.sql.Types.INTEGER);
+            }
 
             int count = psOrder.executeUpdate();
             if (count == 0) {

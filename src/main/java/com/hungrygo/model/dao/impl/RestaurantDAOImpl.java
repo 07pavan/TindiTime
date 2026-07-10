@@ -17,13 +17,18 @@ import java.util.List;
  */
 public class RestaurantDAOImpl implements RestaurantDAO {
 
-    private static final String INSERT_RESTAURANT = "INSERT INTO restaurants (name, cuisine_type, rating, delivery_time_mins, cost_for_two, image_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    private static final String SELECT_RESTAURANT_BY_ID = "SELECT * FROM restaurants WHERE id = ?;";
-    private static final String SELECT_ALL_RESTAURANTS = "SELECT * FROM restaurants WHERE is_active = 1;";
-    private static final String SELECT_RESTAURANTS_BY_CUISINE = "SELECT * FROM restaurants WHERE cuisine_type LIKE ? AND is_active = 1;";
-    private static final String SEARCH_RESTAURANTS = "SELECT * FROM restaurants WHERE (name LIKE ? OR cuisine_type LIKE ?) AND is_active = 1;";
-    private static final String UPDATE_RESTAURANT = "UPDATE restaurants SET name = ?, cuisine_type = ?, rating = ?, delivery_time_mins = ?, cost_for_two = ?, image_url = ?, is_active = ? WHERE id = ?;";
-    private static final String DELETE_RESTAURANT = "DELETE FROM restaurants WHERE id = ?;";
+    private static final String INSERT_RESTAURANT =
+        "INSERT INTO restaurants (name, cuisine_type, rating, delivery_time_mins, cost_for_two," +
+        " image_url, is_active, status, address, city, phone, email, description) " +
+        "VALUES (?, ?, ?, ?, ?, ?, 1, 'ACTIVE', ?, ?, ?, ?, ?)";
+    private static final String SELECT_RESTAURANT_BY_ID = "SELECT * FROM restaurants WHERE id = ?";
+    private static final String SELECT_ALL_RESTAURANTS = "SELECT * FROM restaurants WHERE is_active = 1";
+    private static final String SELECT_RESTAURANTS_BY_CUISINE = "SELECT * FROM restaurants WHERE cuisine_type LIKE ? AND is_active = 1";
+    private static final String SEARCH_RESTAURANTS = "SELECT * FROM restaurants WHERE (name LIKE ? OR cuisine_type LIKE ?) AND is_active = 1";
+    private static final String UPDATE_RESTAURANT =
+        "UPDATE restaurants SET name=?, cuisine_type=?, rating=?, delivery_time_mins=?," +
+        " cost_for_two=?, image_url=?, address=?, city=?, phone=?, email=?, description=? WHERE id=?";
+    private static final String DELETE_RESTAURANT = "DELETE FROM restaurants WHERE id=?";
 
     @Override
     public boolean addRestaurant(Restaurant restaurant) {
@@ -35,16 +40,18 @@ public class RestaurantDAOImpl implements RestaurantDAO {
             ps = conn.prepareStatement(INSERT_RESTAURANT);
             ps.setString(1, restaurant.getName());
             ps.setString(2, restaurant.getCuisineType());
-            ps.setBigDecimal(3, restaurant.getRating());
-            ps.setInt(4, restaurant.getDeliveryTimeMins());
-            ps.setBigDecimal(5, restaurant.getCostForTwo());
+            ps.setBigDecimal(3, restaurant.getRating() != null ? restaurant.getRating() : java.math.BigDecimal.ZERO);
+            ps.setInt(4, restaurant.getDeliveryTimeMins() > 0 ? restaurant.getDeliveryTimeMins() : 30);
+            ps.setBigDecimal(5, restaurant.getCostForTwo() != null ? restaurant.getCostForTwo() : java.math.BigDecimal.ZERO);
             ps.setString(6, restaurant.getImageUrl());
-            ps.setBoolean(7, restaurant.isActive());
-            
+            ps.setString(7, restaurant.getAddress());
+            ps.setString(8, restaurant.getCity());
+            ps.setString(9, restaurant.getPhone());
+            ps.setString(10, restaurant.getEmail());
+            ps.setString(11, restaurant.getDescription());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("JDBC addRestaurant error: " + e.getMessage());
-            e.printStackTrace();
             return false;
         } finally {
             DBConnection.closeResources(ps, conn);
@@ -155,17 +162,19 @@ public class RestaurantDAOImpl implements RestaurantDAO {
             ps = conn.prepareStatement(UPDATE_RESTAURANT);
             ps.setString(1, restaurant.getName());
             ps.setString(2, restaurant.getCuisineType());
-            ps.setBigDecimal(3, restaurant.getRating());
-            ps.setInt(4, restaurant.getDeliveryTimeMins());
-            ps.setBigDecimal(5, restaurant.getCostForTwo());
+            ps.setBigDecimal(3, restaurant.getRating() != null ? restaurant.getRating() : java.math.BigDecimal.ZERO);
+            ps.setInt(4, restaurant.getDeliveryTimeMins() > 0 ? restaurant.getDeliveryTimeMins() : 30);
+            ps.setBigDecimal(5, restaurant.getCostForTwo() != null ? restaurant.getCostForTwo() : java.math.BigDecimal.ZERO);
             ps.setString(6, restaurant.getImageUrl());
-            ps.setBoolean(7, restaurant.isActive());
-            ps.setInt(8, restaurant.getId());
-            
+            ps.setString(7, restaurant.getAddress());
+            ps.setString(8, restaurant.getCity());
+            ps.setString(9, restaurant.getPhone());
+            ps.setString(10, restaurant.getEmail());
+            ps.setString(11, restaurant.getDescription());
+            ps.setInt(12, restaurant.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("JDBC updateRestaurant error: " + e.getMessage());
-            e.printStackTrace();
             return false;
         } finally {
             DBConnection.closeResources(ps, conn);
@@ -220,6 +229,9 @@ public class RestaurantDAOImpl implements RestaurantDAO {
         try { restaurant.setDescription(rs.getString("description")); } catch (SQLException ignored) {}
         try { restaurant.setOpenTime(rs.getString("open_time")); }     catch (SQLException ignored) {}
         try { restaurant.setCloseTime(rs.getString("close_time")); }   catch (SQLException ignored) {}
+        try { restaurant.setOwnerName(rs.getString("owner_name")); }   catch (SQLException ignored) {}
+        try { restaurant.setOwnerEmail(rs.getString("owner_email")); } catch (SQLException ignored) {}
+        try { restaurant.setRegisteredDate(rs.getString("registered_date")); } catch (SQLException ignored) {}
         return restaurant;
     }
 
@@ -253,16 +265,22 @@ public class RestaurantDAOImpl implements RestaurantDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            // Build dynamic WHERE clause
+            // Build dynamic WHERE clause with JOIN
             StringBuilder sql = new StringBuilder(
-                "SELECT * FROM restaurants WHERE 1=1");
+                "SELECT r.*, " +
+                "       DATE_FORMAT(r.created_at, '%d %b %Y') AS registered_date, " +
+                "       u.name AS owner_name, " +
+                "       u.email AS owner_email " +
+                "FROM restaurants r " +
+                "LEFT JOIN users u ON r.owner_user_id = u.id " +
+                "WHERE 1=1");
             if (query != null && !query.trim().isEmpty()) {
-                sql.append(" AND (name LIKE ? OR cuisine_type LIKE ?)");
+                sql.append(" AND (r.name LIKE ? OR r.cuisine_type LIKE ?)");
             }
             if (status != null && !status.trim().isEmpty()) {
-                sql.append(" AND status = ?");
+                sql.append(" AND r.status = ?");
             }
-            sql.append(" ORDER BY id DESC LIMIT ? OFFSET ?");
+            sql.append(" ORDER BY r.id DESC LIMIT ? OFFSET ?");
 
             conn = DBConnection.getConnection();
             ps   = conn.prepareStatement(sql.toString());
@@ -336,7 +354,14 @@ public class RestaurantDAOImpl implements RestaurantDAO {
         try {
             conn = DBConnection.getConnection();
             ps   = conn.prepareStatement(
-                "SELECT * FROM restaurants WHERE status = 'PENDING_APPROVAL' ORDER BY id ASC");
+                "SELECT r.*, " +
+                "       DATE_FORMAT(r.created_at, '%d %b %Y') AS registered_date, " +
+                "       u.name AS owner_name, " +
+                "       u.email AS owner_email " +
+                "FROM restaurants r " +
+                "LEFT JOIN users u ON r.owner_user_id = u.id " +
+                "WHERE r.status = 'PENDING_APPROVAL' " +
+                "ORDER BY r.id ASC");
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(extractRestaurantFromResultSet(rs));

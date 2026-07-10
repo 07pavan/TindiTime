@@ -59,13 +59,12 @@ public class ReviewDAOImpl implements ReviewDAO {
         "SELECT r.*, " +
         "  u.name AS customer_name, u.email AS customer_email, " +
         "  rest.name AS restaurant_name, " +
-        "  o.order_id AS order_ref, " +
+        "  NULL AS order_ref, " +
         "  DATE_FORMAT(r.created_at,'%d %b %Y') AS created_fmt, " +
-        "  DATE_FORMAT(r.updated_at,'%d %b %Y') AS updated_fmt " +
+        "  DATE_FORMAT(r.created_at,'%d %b %Y') AS updated_fmt " +
         "FROM reviews r " +
         "LEFT JOIN users       u    ON r.user_id       = u.id " +
-        "LEFT JOIN restaurants rest ON r.restaurant_id = rest.id " +
-        "LEFT JOIN orders      o    ON r.order_id      = o.id ";
+        "LEFT JOIN restaurants rest ON r.restaurant_id = rest.id ";
 
     // ── Customer-facing ───────────────────────────────────────────────────────
 
