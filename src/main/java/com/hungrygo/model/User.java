@@ -25,6 +25,7 @@ public class User implements Serializable {
     private int    totalOrders;
     private double totalSpend;
     private String registeredDate;      // formatted created_at for JSP display
+    private String restaurantName;      // Transient restaurant name for owner
 
     // Constructors
     public User() {}
@@ -92,6 +93,8 @@ public class User implements Serializable {
     public void setRole(String role) { this.role = role; }
 
     public boolean isBanned() { return isBanned; }
+    public boolean getIsBanned() { return isBanned; }
+    public boolean isIsBanned() { return isBanned; }
     public void setIsBanned(boolean isBanned) { this.isBanned = isBanned; }
 
     public int getTotalOrders() { return totalOrders; }
@@ -102,6 +105,9 @@ public class User implements Serializable {
 
     public String getRegisteredDate() { return registeredDate; }
     public void setRegisteredDate(String registeredDate) { this.registeredDate = registeredDate; }
+
+    public String getRestaurantName() { return restaurantName; }
+    public void setRestaurantName(String restaurantName) { this.restaurantName = restaurantName; }
 
     public Timestamp getCreatedAt() {
         return createdAt;

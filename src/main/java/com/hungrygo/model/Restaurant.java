@@ -33,6 +33,9 @@ public class Restaurant implements Serializable {
     private String     description;
     private String     openTime;
     private String     closeTime;
+    private String     ownerName;      // transient display field
+    private String     ownerEmail;     // transient display field
+    private String     registeredDate;  // transient display field
 
     public Restaurant() {}
 
@@ -67,14 +70,20 @@ public class Restaurant implements Serializable {
     public void   setImageUrl(String url)    { this.imageUrl = url; }
 
     public boolean isActive()               { return isActive; }
+    public boolean getIsActive()            { return isActive; }
+    public boolean isIsActive()             { return isActive; }
     public void    setActive(boolean active){ this.isActive = active; }
+    public void    setIsActive(boolean active){ this.isActive = active; }
 
     // ── Admin getters/setters ─────────────────────────────────────────────────
     public String  getStatus()                { return status; }
     public void    setStatus(String status)   { this.status = status; }
 
     public boolean isOpen()                   { return isOpen; }
+    public boolean getIsOpen()                { return isOpen; }
+    public boolean isIsOpen()                 { return isOpen; }
     public void    setOpen(boolean open)      { this.isOpen = open; }
+    public void    setIsOpen(boolean open)    { this.isOpen = open; }
 
     public int  getOwnerUserId()              { return ownerUserId; }
     public void setOwnerUserId(int ownerId)   { this.ownerUserId = ownerId; }
@@ -111,6 +120,15 @@ public class Restaurant implements Serializable {
 
     public String getCloseTime()                   { return closeTime; }
     public void   setCloseTime(String closeTime)   { this.closeTime = closeTime; }
+
+    public String getOwnerName()                   { return ownerName; }
+    public void   setOwnerName(String ownerName)   { this.ownerName = ownerName; }
+
+    public String getOwnerEmail()                  { return ownerEmail; }
+    public void   setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
+
+    public String getRegisteredDate()              { return registeredDate; }
+    public void   setRegisteredDate(String d)      { this.registeredDate = d; }
 
     @Override
     public String toString() {

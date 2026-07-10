@@ -108,8 +108,20 @@ public class MenuItem implements Serializable {
         return isAvailable;
     }
 
+    public boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
     @Override

@@ -52,7 +52,10 @@ public class PromoCode implements Serializable {
     public void       setExpiryDate(LocalDate d)     { this.expiryDate = d; }
 
     public boolean    isActive()                     { return isActive; }
+    public boolean    getIsActive()                  { return isActive; }
+    public boolean    isIsActive()                   { return isActive; }
     public void       setActive(boolean active)      { this.isActive = active; }
+    public void       setIsActive(boolean active)    { this.isActive = active; }
 
     public String     getCreatedAt()                 { return createdAt; }
     public void       setCreatedAt(String s)         { this.createdAt = s; }
