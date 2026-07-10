@@ -2,6 +2,9 @@ package com.hungrygo.controller;
 
 import com.hungrygo.model.dao.UserDAO;
 import com.hungrygo.model.dao.impl.UserDAOImpl;
+import com.hungrygo.model.dao.RestaurantDAO;
+import com.hungrygo.model.dao.impl.RestaurantDAOImpl;
+import com.hungrygo.model.Restaurant;
 import com.hungrygo.model.User;
 
 import jakarta.servlet.ServletException;
@@ -32,6 +35,7 @@ public class LoginServlet extends HttpServlet {
 
     // Data access layer — talks to the `users` table
     private final UserDAO userDAO = new UserDAOImpl();
+    private final RestaurantDAO restaurantDAO = new RestaurantDAOImpl();
 
     // -----------------------------------------------------------------------
     // GET  /login
@@ -106,9 +110,26 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user_id",  authenticatedUser.getId());
             session.setAttribute("username", authenticatedUser.getName());
             session.setAttribute("email",    authenticatedUser.getEmail());
+            session.setAttribute("userEmail", authenticatedUser.getEmail()); // Fix 2: Sidebar email consistency
             session.setAttribute("phone",    authenticatedUser.getPhone());
             session.setAttribute("address",  authenticatedUser.getAddress());
             session.setAttribute("cartSize", 0);   // fresh cart count on every login
+
+            // Role — read by ManagementAccessFilter and manage-sidebar.jsp
+            String userRole = (authenticatedUser.getRole() != null)
+                              ? authenticatedUser.getRole() : "CUSTOMER";
+            session.setAttribute("role",     userRole);
+            session.setAttribute("userRole", userRole);
+            session.setAttribute("userName", authenticatedUser.getName());
+
+            // Fix 1: Associate restaurantId for restaurant owners
+            if ("RESTAURANT_OWNER".equals(userRole)) {
+                Restaurant rest = restaurantDAO.getRestaurantByOwnerId(authenticatedUser.getId());
+                if (rest != null) {
+                    session.setAttribute("restaurantId", rest.getId());
+                    session.setAttribute("restaurantName", rest.getName());
+                }
+            }
 
             // Sync lightweight cookies for any client-side reads
             addStateCookie(response, "username", authenticatedUser.getName());
