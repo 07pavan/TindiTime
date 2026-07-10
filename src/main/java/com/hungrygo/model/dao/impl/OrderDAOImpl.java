@@ -12,7 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Data Access Object Implementation for carrying out transactional inserts of Orders and their respective OrderItems.
@@ -335,6 +338,13 @@ public class OrderDAOImpl implements OrderDAO {
         order.setTotalAmount(rs.getBigDecimal("total_amount"));
         order.setCreatedAt(rs.getTimestamp("created_at"));
         order.setUpdatedAt(rs.getTimestamp("updated_at"));
+        // Admin columns added by migration — silently ignored if absent
+        try { order.setRestaurantId(rs.getInt("restaurant_id")); }    catch (SQLException ignored) {}
+        try { order.setCustomerName(rs.getString("customer_name")); }  catch (SQLException ignored) {}
+        try { order.setCustomerPhone(rs.getString("customer_phone")); } catch (SQLException ignored) {}
+        // Transient enrichment columns from JOIN queries
+        try { order.setCustomerName(rs.getString("u_name")); }         catch (SQLException ignored) {}
+        try { order.setRestaurantName(rs.getString("r_name")); }       catch (SQLException ignored) {}
         return order;
     }
 
@@ -346,5 +356,112 @@ public class OrderDAOImpl implements OrderDAO {
         item.setQuantity(rs.getInt("quantity"));
         item.setPriceAtPurchase(rs.getBigDecimal("price_at_purchase"));
         return item;
+    }
+
+    // ── Admin-only implementations ───────────────────────────────────────────────────────
+
+    /** Builds a reusable WHERE clause + binds params for admin order queries. */
+    private String buildAdminWhereClause(String status, Integer restaurantId,
+                                         String query, String dateFrom, String dateTo) {
+        StringBuilder w = new StringBuilder(" WHERE 1=1");
+        if (status       != null && !status.trim().isEmpty())   w.append(" AND o.order_status = ?");
+        if (restaurantId != null)                               w.append(" AND o.restaurant_id = ?");
+        if (query        != null && !query.trim().isEmpty())    w.append(" AND (o.order_id LIKE ? OR u.name LIKE ?)");
+        if (dateFrom     != null && !dateFrom.trim().isEmpty()) w.append(" AND DATE(o.created_at) >= ?");
+        if (dateTo       != null && !dateTo.trim().isEmpty())   w.append(" AND DATE(o.created_at) <= ?");
+        return w.toString();
+    }
+
+    private int bindAdminParams(PreparedStatement ps, int startIdx,
+                                String status, Integer restaurantId,
+                                String query, String dateFrom, String dateTo)
+            throws SQLException {
+        int idx = startIdx;
+        if (status       != null && !status.trim().isEmpty())   ps.setString(idx++, status.trim());
+        if (restaurantId != null)                               ps.setInt(idx++, restaurantId);
+        if (query        != null && !query.trim().isEmpty()) {
+            String w = "%" + query.trim() + "%";
+            ps.setString(idx++, w);
+            ps.setString(idx++, w);
+        }
+        if (dateFrom != null && !dateFrom.trim().isEmpty())     ps.setString(idx++, dateFrom.trim());
+        if (dateTo   != null && !dateTo.trim().isEmpty())       ps.setString(idx++, dateTo.trim());
+        return idx;
+    }
+
+    @Override
+    public List<Order> getOrdersAdmin(String status, Integer restaurantId, String query,
+                                       String dateFrom, String dateTo, int page, int pageSize) {
+        List<Order> list = new ArrayList<>();
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            String where = buildAdminWhereClause(status, restaurantId, query, dateFrom, dateTo);
+            String sql =
+                "SELECT o.*, u.name AS u_name, COALESCE(r.name,'N/A') AS r_name " +
+                "FROM orders o " +
+                "LEFT JOIN users u       ON o.user_id       = u.id " +
+                "LEFT JOIN restaurants r ON o.restaurant_id = r.id " +
+                where + " ORDER BY o.created_at DESC LIMIT ? OFFSET ?";
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql);
+            int idx = bindAdminParams(ps, 1, status, restaurantId, query, dateFrom, dateTo);
+            ps.setInt(idx++, pageSize);
+            ps.setInt(idx,   (page - 1) * pageSize);
+
+            rs = ps.executeQuery();
+            while (rs.next()) list.add(extractOrderFromResultSet(rs));
+        } catch (SQLException e) {
+            System.err.println("JDBC getOrdersAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return list;
+    }
+
+    @Override
+    public int countOrdersAdmin(String status, Integer restaurantId, String query,
+                                 String dateFrom, String dateTo) {
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            String where = buildAdminWhereClause(status, restaurantId, query, dateFrom, dateTo);
+            String sql =
+                "SELECT COUNT(*) FROM orders o " +
+                "LEFT JOIN users u ON o.user_id = u.id " + where;
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql);
+            bindAdminParams(ps, 1, status, restaurantId, query, dateFrom, dateTo);
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("JDBC countOrdersAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return 0;
+    }
+
+    @Override
+    public Map<String, Long> getOrderStatusCounts(Integer restaurantId) {
+        // Preserve pipeline order using LinkedHashMap
+        Map<String, Long> counts = new LinkedHashMap<>();
+        String[] statuses = {"Placed", "Confirmed", "Preparing", "Out for Delivery", "Delivered", "Cancelled"};
+        for (String s : statuses) counts.put(s, 0L);
+
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            String sql = (restaurantId == null)
+                ? "SELECT order_status, COUNT(*) FROM orders GROUP BY order_status"
+                : "SELECT order_status, COUNT(*) FROM orders WHERE restaurant_id = ? GROUP BY order_status";
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql);
+            if (restaurantId != null) ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String key = rs.getString(1);
+                if (key != null) counts.put(key, rs.getLong(2));
+            }
+        } catch (SQLException e) {
+            System.err.println("JDBC getOrderStatusCounts error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return counts;
     }
 }

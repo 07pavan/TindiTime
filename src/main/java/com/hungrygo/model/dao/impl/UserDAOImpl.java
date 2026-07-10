@@ -13,7 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Data Access Object Implementation for User profile storage and authentication using JDBC.
@@ -261,8 +263,160 @@ public class UserDAOImpl implements UserDAO {
         user.setPhone(rs.getString("phone"));
         user.setAddress(rs.getString("address"));
         user.setRole(rs.getString("role"));
+        // is_banned added by admin migration — gracefully ignored if column absent
+        try { user.setIsBanned(rs.getInt("is_banned") == 1); } catch (SQLException ignored) {}
         user.setCreatedAt(rs.getTimestamp("created_at"));
         user.setUpdatedAt(rs.getTimestamp("updated_at"));
+        // Transient admin fields from JOIN queries
+        try { user.setTotalOrders((int) rs.getLong("order_count")); }    catch (SQLException ignored) {}
+        try { user.setRegisteredDate(rs.getString("reg_date")); }         catch (SQLException ignored) {}
         return user;
+    }
+
+    // ── Admin-only implementations ────────────────────────────────────────────
+
+    @Override
+    public List<User> getAllUsersAdmin(String role, String status, String query,
+                                       int page, int pageSize) {
+        List<User> list = new ArrayList<>();
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            StringBuilder sql = new StringBuilder(
+                "SELECT u.*, " +
+                "  COUNT(o.id) AS order_count, " +
+                "  DATE_FORMAT(u.created_at, '%d %b %Y') AS reg_date " +
+                "FROM users u " +
+                "LEFT JOIN orders o ON o.user_id = u.id " +
+                "WHERE 1=1");
+
+            if (role   != null && !role.trim().isEmpty())  sql.append(" AND u.role = ?");
+            if (status != null) {
+                if ("BANNED".equals(status))  sql.append(" AND u.is_banned = 1");
+                else if ("ACTIVE".equals(status)) sql.append(" AND u.is_banned = 0");
+            }
+            if (query  != null && !query.trim().isEmpty()) sql.append(" AND (u.name LIKE ? OR u.email LIKE ?)");
+            sql.append(" GROUP BY u.id ORDER BY u.created_at DESC LIMIT ? OFFSET ?");
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql.toString());
+            int idx = 1;
+            if (role  != null && !role.trim().isEmpty())  ps.setString(idx++, role.trim());
+            if (query != null && !query.trim().isEmpty()) {
+                String w = "%" + query.trim() + "%";
+                ps.setString(idx++, w);
+                ps.setString(idx++, w);
+            }
+            ps.setInt(idx++, pageSize);
+            ps.setInt(idx,   (page - 1) * pageSize);
+
+            rs = ps.executeQuery();
+            while (rs.next()) list.add(extractUserFromResultSet(rs));
+        } catch (SQLException e) {
+            System.err.println("JDBC getAllUsersAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return list;
+    }
+
+    @Override
+    public int countUsersAdmin(String role, String status, String query) {
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM users WHERE 1=1");
+            if (role   != null && !role.trim().isEmpty())  sql.append(" AND role = ?");
+            if (status != null) {
+                if ("BANNED".equals(status))        sql.append(" AND is_banned = 1");
+                else if ("ACTIVE".equals(status))   sql.append(" AND is_banned = 0");
+            }
+            if (query  != null && !query.trim().isEmpty()) sql.append(" AND (name LIKE ? OR email LIKE ?)");
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql.toString());
+            int idx = 1;
+            if (role  != null && !role.trim().isEmpty()) ps.setString(idx++, role.trim());
+            if (query != null && !query.trim().isEmpty()) {
+                String w = "%" + query.trim() + "%";
+                ps.setString(idx++, w);
+                ps.setString(idx++, w);
+            }
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("JDBC countUsersAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return 0;
+    }
+
+    @Override
+    public Map<String, Long> getUserRoleCounts() {
+        Map<String, Long> counts = new LinkedHashMap<>();
+        // guaranteed keys in display order
+        counts.put("CUSTOMER",         0L);
+        counts.put("RESTAURANT_OWNER", 0L);
+        counts.put("SUPER_ADMIN",      0L);
+        counts.put("BANNED",           0L);
+
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            conn = DBConnection.getConnection();
+            // Role counts
+            ps = conn.prepareStatement("SELECT role, COUNT(*) FROM users GROUP BY role");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String key = rs.getString(1);
+                if (key != null && counts.containsKey(key)) counts.put(key, rs.getLong(2));
+            }
+            DBConnection.closeResources(rs, ps);
+
+            // Banned count (cross-role)
+            ps = conn.prepareStatement("SELECT COUNT(*) FROM users WHERE is_banned = 1");
+            rs = ps.executeQuery();
+            if (rs.next()) counts.put("BANNED", rs.getLong(1));
+        } catch (SQLException e) {
+            System.err.println("JDBC getUserRoleCounts error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return counts;
+    }
+
+    @Override
+    public boolean banUser(int userId) {
+        Connection conn = null; PreparedStatement ps = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement("UPDATE users SET is_banned = 1 WHERE id = ?");
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("JDBC banUser error: " + e.getMessage());
+        } finally { DBConnection.closeResources(ps, conn); }
+        return false;
+    }
+
+    @Override
+    public boolean unbanUser(int userId) {
+        Connection conn = null; PreparedStatement ps = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement("UPDATE users SET is_banned = 0 WHERE id = ?");
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("JDBC unbanUser error: " + e.getMessage());
+        } finally { DBConnection.closeResources(ps, conn); }
+        return false;
+    }
+
+    @Override
+    public boolean updateUserRole(int userId, String newRole) {
+        Connection conn = null; PreparedStatement ps = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement("UPDATE users SET role = ? WHERE id = ?");
+            ps.setString(1, newRole);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("JDBC updateUserRole error: " + e.getMessage());
+        } finally { DBConnection.closeResources(ps, conn); }
+        return false;
     }
 }

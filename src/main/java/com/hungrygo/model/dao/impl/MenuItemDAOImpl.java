@@ -179,4 +179,98 @@ public class MenuItemDAOImpl implements MenuItemDAO {
         item.setAvailable(rs.getBoolean("is_available"));
         return item;
     }
+
+    // ── Admin-only implementations ────────────────────────────────────────────
+
+    @Override
+    public List<MenuItem> searchMenuItemsAdmin(Integer restaurantId, String category,
+                                               String query, int page, int pageSize) {
+        List<MenuItem> list = new ArrayList<>();
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            StringBuilder sql = new StringBuilder(
+                "SELECT m.*, r.name AS restaurant_name " +
+                "FROM menu_items m LEFT JOIN restaurants r ON m.restaurant_id = r.id " +
+                "WHERE 1=1");
+            if (restaurantId != null)                              sql.append(" AND m.restaurant_id = ?");
+            if (category != null && !category.trim().isEmpty())    sql.append(" AND m.category = ?");
+            if (query    != null && !query.trim().isEmpty())       sql.append(" AND m.name LIKE ?");
+            sql.append(" ORDER BY m.restaurant_id, m.category, m.name LIMIT ? OFFSET ?");
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql.toString());
+            int idx = 1;
+            if (restaurantId != null)                            ps.setInt(idx++, restaurantId);
+            if (category != null && !category.trim().isEmpty())  ps.setString(idx++, category.trim());
+            if (query    != null && !query.trim().isEmpty())     ps.setString(idx++, "%" + query.trim() + "%");
+            ps.setInt(idx++, pageSize);
+            ps.setInt(idx,   (page - 1) * pageSize);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                MenuItem item = extractMenuItemFromResultSet(rs);
+                // Attach restaurant name as transient field if MenuItem has it
+                try { item.setRestaurantName(rs.getString("restaurant_name")); } catch (Exception ignored) {}
+                list.add(item);
+            }
+        } catch (SQLException e) {
+            System.err.println("JDBC searchMenuItemsAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return list;
+    }
+
+    @Override
+    public int countMenuItemsAdmin(Integer restaurantId, String category, String query) {
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM menu_items WHERE 1=1");
+            if (restaurantId != null)                             sql.append(" AND restaurant_id = ?");
+            if (category != null && !category.trim().isEmpty())   sql.append(" AND category = ?");
+            if (query    != null && !query.trim().isEmpty())      sql.append(" AND name LIKE ?");
+
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(sql.toString());
+            int idx = 1;
+            if (restaurantId != null)                           ps.setInt(idx++, restaurantId);
+            if (category != null && !category.trim().isEmpty()) ps.setString(idx++, category.trim());
+            if (query    != null && !query.trim().isEmpty())    ps.setString(idx++, "%" + query.trim() + "%");
+
+            rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("JDBC countMenuItemsAdmin error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return 0;
+    }
+
+    @Override
+    public List<String> getDistinctCategories() {
+        List<String> cats = new ArrayList<>();
+        Connection conn = null; PreparedStatement ps = null; ResultSet rs = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(
+                "SELECT DISTINCT category FROM menu_items WHERE category IS NOT NULL ORDER BY category");
+            rs = ps.executeQuery();
+            while (rs.next()) cats.add(rs.getString(1));
+        } catch (SQLException e) {
+            System.err.println("JDBC getDistinctCategories error: " + e.getMessage());
+        } finally { DBConnection.closeResources(rs, ps, conn); }
+        return cats;
+    }
+
+    @Override
+    public boolean toggleAvailability(int itemId) {
+        Connection conn = null; PreparedStatement ps = null;
+        try {
+            conn = DBConnection.getConnection();
+            ps   = conn.prepareStatement(
+                "UPDATE menu_items SET is_available = NOT is_available WHERE id = ?");
+            ps.setInt(1, itemId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("JDBC toggleAvailability error: " + e.getMessage());
+        } finally { DBConnection.closeResources(ps, conn); }
+        return false;
+    }
 }
