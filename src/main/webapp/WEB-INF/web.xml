@@ -1,308 +1,228 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
-         version="5.0"
-         metadata-complete="true">
-         
-    <display-name>HungryGO</display-name>
-
-    <!-- ============================================================ -->
-    <!-- Security Filter - Enforces Login for Protected Pages          -->
-    <!-- ============================================================ -->
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>com.hungrygo.filter.AuthenticationFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!-- ============================================================ -->
-    <!-- Management Access Filter - Role Guard for /manage/*          -->
-    <!-- ============================================================ -->
-    <filter>
-        <filter-name>ManagementAccessFilter</filter-name>
-        <filter-class>com.hungrygo.filter.ManagementAccessFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ManagementAccessFilter</filter-name>
-        <url-pattern>/manage/*</url-pattern>
-    </filter-mapping>
-
-    <!-- ============================================================ -->
-    <!-- Servlet Declarations                                          -->
-    <!-- ============================================================ -->
-
-    <servlet>
-        <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.HomeServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.LoginServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.RegisterServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>RestaurantServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.RestaurantServlet</servlet-class>
-        <load-on-startup>4</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>MenuServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.MenuServlet</servlet-class>
-        <load-on-startup>5</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CartServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.CartServlet</servlet-class>
-        <load-on-startup>6</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>CheckoutServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.CheckoutServlet</servlet-class>
-        <load-on-startup>7</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>OrderServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.OrderServlet</servlet-class>
-        <load-on-startup>8</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>ProfileServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.ProfileServlet</servlet-class>
-        <load-on-startup>9</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>SuccessServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.SuccessServlet</servlet-class>
-        <load-on-startup>10</load-on-startup>
-    </servlet>
-
-    <!-- ============================================================ -->
-    <!-- Admin / Management Servlets (load-on-startup 11–18)          -->
-    <!-- ============================================================ -->
-
-    <servlet>
-        <servlet-name>AdminDashboardServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminDashboardServlet</servlet-class>
-        <load-on-startup>11</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminRestaurantServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminRestaurantServlet</servlet-class>
-        <load-on-startup>12</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminCatalogServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminCatalogServlet</servlet-class>
-        <load-on-startup>13</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminOrderServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminOrderServlet</servlet-class>
-        <load-on-startup>14</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminUserServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminUserServlet</servlet-class>
-        <load-on-startup>15</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminPromoServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminPromoServlet</servlet-class>
-        <load-on-startup>16</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminReviewServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminReviewServlet</servlet-class>
-        <load-on-startup>17</load-on-startup>
-    </servlet>
-
-    <servlet>
-        <servlet-name>AdminSettingsServlet</servlet-name>
-        <servlet-class>com.hungrygo.controller.AdminSettingsServlet</servlet-class>
-        <load-on-startup>18</load-on-startup>
-    </servlet>
-
-    <!-- ============================================================ -->
-    <!-- Servlet Mappings                                              -->
-    <!-- ============================================================ -->
-
-    <servlet-mapping>
-        <servlet-name>HomeServlet</servlet-name>
-        <url-pattern>/home</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>HomeServlet</servlet-name>
-        <url-pattern>/index</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RegisterServlet</servlet-name>
-        <url-pattern>/register</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RestaurantServlet</servlet-name>
-        <url-pattern>/restaurants</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>MenuServlet</servlet-name>
-        <url-pattern>/menu</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>CartServlet</servlet-name>
-        <url-pattern>/cart</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>CheckoutServlet</servlet-name>
-        <url-pattern>/checkout</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>OrderServlet</servlet-name>
-        <url-pattern>/orders</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ProfileServlet</servlet-name>
-        <url-pattern>/profile</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>SuccessServlet</servlet-name>
-        <url-pattern>/success</url-pattern>
-    </servlet-mapping>
-
-    <!-- ============================================================ -->
-    <!-- Admin / Management Servlet Mappings                          -->
-    <!-- ============================================================ -->
-
-    <servlet-mapping>
-        <servlet-name>AdminDashboardServlet</servlet-name>
-        <url-pattern>/manage</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminDashboardServlet</servlet-name>
-        <url-pattern>/manage/dashboard</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminRestaurantServlet</servlet-name>
-        <url-pattern>/manage/restaurants</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminRestaurantServlet</servlet-name>
-        <url-pattern>/manage/restaurants/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminCatalogServlet</servlet-name>
-        <url-pattern>/manage/catalog</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminCatalogServlet</servlet-name>
-        <url-pattern>/manage/catalog/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminOrderServlet</servlet-name>
-        <url-pattern>/manage/orders</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminOrderServlet</servlet-name>
-        <url-pattern>/manage/orders/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminUserServlet</servlet-name>
-        <url-pattern>/manage/users</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminUserServlet</servlet-name>
-        <url-pattern>/manage/users/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminPromoServlet</servlet-name>
-        <url-pattern>/manage/promos</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminPromoServlet</servlet-name>
-        <url-pattern>/manage/promos/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminReviewServlet</servlet-name>
-        <url-pattern>/manage/reviews</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminReviewServlet</servlet-name>
-        <url-pattern>/manage/reviews/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>AdminSettingsServlet</servlet-name>
-        <url-pattern>/manage/settings</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminSettingsServlet</servlet-name>
-        <url-pattern>/manage/settings/*</url-pattern>
-    </servlet-mapping>
-
-    <!-- ============================================================ -->
-    <!-- Welcome File - routes through HomeServlet                    -->
-    <!-- ============================================================ -->
-    <welcome-file-list>
-        <welcome-file>index</welcome-file>
-    </welcome-file-list>
-
-    <!-- ============================================================ -->
-    <!-- Session Configuration                                         -->
-    <!-- ============================================================ -->
-    <session-config>
-        <session-timeout>60</session-timeout>
-    </session-config>
-
-    <!-- ============================================================ -->
-    <!-- Listener - Database Cleanup on Context Destroy               -->
-    <!-- ============================================================ -->
-    <listener>
-        <listener-class>com.hungrygo.util.DatabaseCleanupListener</listener-class>
-    </listener>
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" metadata-complete="true" version="5.0">
+  <display-name>HungryGO</display-name>
+  <filter>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>com.hungrygo.filter.AuthenticationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenticationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>ManagementAccessFilter</filter-name>
+    <filter-class>com.hungrygo.filter.ManagementAccessFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ManagementAccessFilter</filter-name>
+    <url-pattern>/manage/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.HomeServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.LoginServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.RegisterServlet</servlet-class>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>RestaurantServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.RestaurantServlet</servlet-class>
+    <load-on-startup>4</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>MenuServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.MenuServlet</servlet-class>
+    <load-on-startup>5</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>CartServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.CartServlet</servlet-class>
+    <load-on-startup>6</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>CheckoutServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.CheckoutServlet</servlet-class>
+    <load-on-startup>7</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.OrderServlet</servlet-class>
+    <load-on-startup>8</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.ProfileServlet</servlet-class>
+    <load-on-startup>9</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>SuccessServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.SuccessServlet</servlet-class>
+    <load-on-startup>10</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminDashboardServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminDashboardServlet</servlet-class>
+    <load-on-startup>11</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminRestaurantServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminRestaurantServlet</servlet-class>
+    <load-on-startup>12</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminCatalogServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminCatalogServlet</servlet-class>
+    <load-on-startup>13</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminOrderServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminOrderServlet</servlet-class>
+    <load-on-startup>14</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminUserServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminUserServlet</servlet-class>
+    <load-on-startup>15</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminPromoServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminPromoServlet</servlet-class>
+    <load-on-startup>16</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminReviewServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminReviewServlet</servlet-class>
+    <load-on-startup>17</load-on-startup>
+  </servlet>
+  <servlet>
+    <servlet-name>AdminSettingsServlet</servlet-name>
+    <servlet-class>com.hungrygo.controller.AdminSettingsServlet</servlet-class>
+    <load-on-startup>18</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/index</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RestaurantServlet</servlet-name>
+    <url-pattern>/restaurants</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>MenuServlet</servlet-name>
+    <url-pattern>/menu</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CartServlet</servlet-name>
+    <url-pattern>/cart</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CheckoutServlet</servlet-name>
+    <url-pattern>/checkout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>OrderServlet</servlet-name>
+    <url-pattern>/orders</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SuccessServlet</servlet-name>
+    <url-pattern>/success</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminDashboardServlet</servlet-name>
+    <url-pattern>/manage</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminDashboardServlet</servlet-name>
+    <url-pattern>/manage/dashboard</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminRestaurantServlet</servlet-name>
+    <url-pattern>/manage/restaurants</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminRestaurantServlet</servlet-name>
+    <url-pattern>/manage/restaurants/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminCatalogServlet</servlet-name>
+    <url-pattern>/manage/catalog</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminCatalogServlet</servlet-name>
+    <url-pattern>/manage/catalog/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminOrderServlet</servlet-name>
+    <url-pattern>/manage/orders</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminOrderServlet</servlet-name>
+    <url-pattern>/manage/orders/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminUserServlet</servlet-name>
+    <url-pattern>/manage/users</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminUserServlet</servlet-name>
+    <url-pattern>/manage/users/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminPromoServlet</servlet-name>
+    <url-pattern>/manage/promos</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminPromoServlet</servlet-name>
+    <url-pattern>/manage/promos/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminReviewServlet</servlet-name>
+    <url-pattern>/manage/reviews</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminReviewServlet</servlet-name>
+    <url-pattern>/manage/reviews/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminSettingsServlet</servlet-name>
+    <url-pattern>/manage/settings</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AdminSettingsServlet</servlet-name>
+    <url-pattern>/manage/settings/*</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index</welcome-file>
+  </welcome-file-list>
+  <session-config>
+    <session-timeout>60</session-timeout>
+  </session-config>
+  <listener>
+    <listener-class>com.hungrygo.util.DatabaseCleanupListener</listener-class>
+  </listener>
 </web-app>
 <!-- Reload Trigger: 1 -->
-
